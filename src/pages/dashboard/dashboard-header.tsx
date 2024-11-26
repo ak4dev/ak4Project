@@ -1,6 +1,4 @@
 import { Header, SpaceBetween } from "@cloudscape-design/components";
-import RouterButton from "../../components/wrappers/router-button";
-import RouterButtonDropdown from "../../components/wrappers/router-button-dropdown";
 
 export default function DashboardHeader() {
   return (
@@ -8,7 +6,7 @@ export default function DashboardHeader() {
       variant="h1"
       actions={
         <SpaceBetween direction="horizontal" size="xs">
-          <RouterButton href="/section1">View Items</RouterButton>
+          {/* <RouterButton href="/section1">View Items</RouterButton>
           <RouterButtonDropdown
             items={[
               {
@@ -19,11 +17,11 @@ export default function DashboardHeader() {
             ]}
           >
             Add data
-          </RouterButtonDropdown>
+          </RouterButtonDropdown> */}
         </SpaceBetween>
       }
     >
-      Dashboard
+      Blog Title
     </Header>
   );
 }
