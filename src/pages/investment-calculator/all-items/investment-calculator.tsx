@@ -15,10 +15,10 @@ const containerHeader = <Header>Investment Calculator</Header>;
 
 export default function InvestmentCalculator() {
   const [currentAmount, setCurrentAmount] = useState<string | undefined>(
-    "120000"
+    "10000"
   );
-  const [projectedGain, setProjectedGain] = useState<string | undefined>("12");
-  const [yearsOfGrowth, setYearsOfGrowth] = useState<string | undefined>("12");
+  const [projectedGain, setProjectedGain] = useState<string | undefined>("10");
+  const [yearsOfGrowth, setYearsOfGrowth] = useState<string | undefined>("30");
   const yoyGrowth: { x: Date; y: number }[] = [];
   const lineChart = (
     <LineChart

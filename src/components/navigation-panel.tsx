@@ -30,12 +30,6 @@ export default function NavigationPanel() {
 
     items.push(
       { type: "divider" },
-      {
-        type: "link",
-        text: "Documentation",
-        href: "https://gitlab.aws.dev/aws-emea-prototyping/modern-application-development/user-experience-frontend/cloudscape",
-        external: true,
-      }
     );
 
     return items;
