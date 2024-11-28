@@ -8,6 +8,7 @@ import { useOnFollow } from "../../common/hooks/use-on-follow";
 import BaseAppLayout from "../../components/base-app-layout";
 import DashboardHeader from "./dashboard-header";
 import BlogContainer from "./blog-container";
+import InvestmentCalculator from "../investment-calculator/all-items/investment-calculator";
 
 export default function DashboardPage() {
   const onFollow = useOnFollow();
@@ -26,9 +27,9 @@ export default function DashboardPage() {
         />
       }
       content={
-        <ContentLayout header={<DashboardHeader />}>
+        <ContentLayout>
           <SpaceBetween size="l">
-            <BlogContainer />
+            <InvestmentCalculator />
           </SpaceBetween>
         </ContentLayout>
       }

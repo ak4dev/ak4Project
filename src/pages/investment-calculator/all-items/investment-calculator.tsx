@@ -155,7 +155,7 @@ export default function InvestmentCalculator() {
           value={`$${currentAmount && currentAmount.toLocaleString()}` || ""}
         />
       </FormField>
-      <FormField description="Projected return (%)">
+      <FormField description={`Estimated return (${projectedGain.toString()}%)`}>
         <Slider
           onChange={({ detail }) => setProjectedGain(detail.value)}
           value={projectedGain}
@@ -164,7 +164,7 @@ export default function InvestmentCalculator() {
           tickMarks
         />
       </FormField>
-      <FormField description="Years">
+      <FormField description={`Years ${yearsOfGrowth.toString()}`}>
         <Slider
           onChange={({ detail }) => setYearsOfGrowth(detail.value)}
           value={yearsOfGrowth}
