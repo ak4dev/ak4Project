@@ -164,7 +164,7 @@ export default function InvestmentCalculator() {
           tickMarks
         />
       </FormField>
-      <FormField description={`Years ${yearsOfGrowth.toString()}`}>
+      <FormField description={`Years (${yearsOfGrowth.toString()})`}>
         <Slider
           onChange={({ detail }) => setYearsOfGrowth(detail.value)}
           value={yearsOfGrowth}
@@ -175,7 +175,7 @@ export default function InvestmentCalculator() {
       </FormField>
       {advanced && (
         <>
-          <FormField description="Monthly contribution">
+          <FormField description={`Monthly contribution ($${monthlyContribution})`}>
             <Slider
               onChange={({ detail }) => setMonthlyContribution(detail.value)}
               value={monthlyContribution}
@@ -184,7 +184,7 @@ export default function InvestmentCalculator() {
               tickMarks
             />
           </FormField>
-          <FormField description="Year contributions stop">
+          <FormField description={`Year contributions stop (${yearContributionsStop})`}>
             <Slider
               onChange={({ detail }) => setYearContributionsStop(detail.value)}
               value={yearContributionsStop}
@@ -193,7 +193,7 @@ export default function InvestmentCalculator() {
               tickMarks
             />
           </FormField>
-          <FormField description="Year withdrawals begin">
+          <FormField description={`Year withdrawals begin ${yearWithdrawalsBegin !== .9 ? `(${yearWithdrawalsBegin})` : ""}`}>
             <Slider
               onChange={({ detail }) => setYearWithdrawalsBegin(detail.value)}
               value={
@@ -206,7 +206,7 @@ export default function InvestmentCalculator() {
               tickMarks
             />
           </FormField>
-          <FormField description="Monthly withdrawals">
+          <FormField description={`Monthly withdrawal ($${monthlyWithdrawal})`}>
             <Slider
               onChange={({ detail }) => setMonthlyWithdrawal(detail.value)}
               value={monthlyWithdrawal}

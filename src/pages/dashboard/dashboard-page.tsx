@@ -6,8 +6,8 @@ import {
 } from "@cloudscape-design/components";
 import { useOnFollow } from "../../common/hooks/use-on-follow";
 import BaseAppLayout from "../../components/base-app-layout";
-import DashboardHeader from "./dashboard-header";
-import BlogContainer from "./blog-container";
+// import DashboardHeader from "./dashboard-header";
+// import BlogContainer from "./blog-container";
 import InvestmentCalculator from "../investment-calculator/all-items/investment-calculator";
 
 export default function DashboardPage() {
