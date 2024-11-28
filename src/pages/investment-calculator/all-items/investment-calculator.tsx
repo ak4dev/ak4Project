@@ -155,12 +155,13 @@ export default function InvestmentCalculator() {
           value={`$${currentAmount && currentAmount.toLocaleString()}` || ""}
         />
       </FormField>
-      <FormField description="Projected return">
+      <FormField description="Projected return (%)">
         <Slider
           onChange={({ detail }) => setProjectedGain(detail.value)}
           value={projectedGain}
-          max={100}
+          max={30}
           min={0}
+          tickMarks
         />
       </FormField>
       <FormField description="Years">
@@ -169,6 +170,7 @@ export default function InvestmentCalculator() {
           value={yearsOfGrowth}
           max={100}
           min={0}
+          tickMarks
         />
       </FormField>
       {advanced && (
@@ -179,6 +181,7 @@ export default function InvestmentCalculator() {
               value={monthlyContribution}
               max={5000}
               min={0}
+              tickMarks
             />
           </FormField>
           <FormField description="Year contributions stop">
@@ -187,6 +190,7 @@ export default function InvestmentCalculator() {
               value={yearContributionsStop}
               max={yearsOfGrowth}
               min={0}
+              tickMarks
             />
           </FormField>
           <FormField description="Year withdrawals begin">
@@ -199,6 +203,7 @@ export default function InvestmentCalculator() {
               }
               max={yearsOfGrowth}
               min={0}
+              tickMarks
             />
           </FormField>
           <FormField description="Monthly withdrawals">
@@ -206,6 +211,7 @@ export default function InvestmentCalculator() {
               onChange={({ detail }) => setMonthlyWithdrawal(detail.value)}
               value={monthlyWithdrawal}
               max={maxMonthlyWithdrawal}
+              tickMarks
               min={0}
             />
           </FormField>
