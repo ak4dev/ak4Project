@@ -3,24 +3,46 @@ import {
   Button,
   Container,
   FormField,
+  Grid,
   Header,
   Input,
   LineChart,
+  Slider,
   TextContent,
+  Toggle,
 } from "@cloudscape-design/components";
 import { addYears } from "date-fns";
 import { useState } from "react";
-// Testing S3 Sync
-
-const containerHeader = <Header>Investment Calculator</Header>;
 
 export default function InvestmentCalculator() {
+  const [advanced, setAdvanced] = useState<boolean>(false);
   const [currentAmount, setCurrentAmount] = useState<string | undefined>(
     "10000"
   );
-  const [projectedGain, setProjectedGain] = useState<string | undefined>("10");
-  const [yearsOfGrowth, setYearsOfGrowth] = useState<string | undefined>("30");
+  const [projectedGain, setProjectedGain] = useState<number>(10);
+  const [yearsOfGrowth, setYearsOfGrowth] = useState<number>(30);
+  const [monthlyContribution, setMonthlyContribution] = useState<number>(0);
+  const [monthlyWithdrawal, setMonthlyWithdrawal] = useState<number>(0);
+  const [yearWithdrawalsBegin, setYearWithdrawalsBegin] = useState<number>(0.9);
+  const [yearContributionsStop, setYearContributionsStop] = useState<
+    number | undefined
+  >(yearsOfGrowth);
   const yoyGrowth: { x: Date; y: number }[] = [];
+  const maxMonthlyWithdrawal = 10000;
+  console.log(yoyGrowth);
+  const containerHeader = (
+    <Grid>
+      <Header>
+        Investment Calculator
+        <Toggle
+          onChange={({ detail }) => setAdvanced(detail.checked)}
+          checked={advanced}
+        >
+          Advanced
+        </Toggle>
+      </Header>
+    </Grid>
+  );
   const lineChart = (
     <LineChart
       series={[
@@ -88,16 +110,31 @@ export default function InvestmentCalculator() {
 
   function calculateGrowth(
     amount: string | undefined,
-    projGain: string | undefined,
-    yearsOfGrowth: string | undefined
+    projGain: number | undefined,
+    yearsOfGrowth: number | undefined
   ): string {
     const today = new Date();
     if (amount && projGain && yearsOfGrowth) {
       var pAmount = parseInt(amount) || 0;
-      const pGain = parseInt(projGain);
-      for (let i = 0; i < parseInt(yearsOfGrowth); i++) {
+      const pGain = projGain;
+      for (let year = 0; year < yearsOfGrowth; year++) {
+        for (let month = 0; month < 12; month++) {
+          if (advanced && monthlyWithdrawal && yearWithdrawalsBegin) {
+            if (yearWithdrawalsBegin && year >= yearWithdrawalsBegin) {
+              pAmount -= monthlyWithdrawal;
+            }
+          }
+          if (
+            (advanced && !yearContributionsStop) ||
+            !(yearContributionsStop && year > yearContributionsStop)
+          ) {
+            pAmount += monthlyContribution;
+            pAmount += monthlyContribution * (pGain / 100);
+            console.log(`pAmount at year ${year}, month ${month}:`, pAmount);
+          }
+        }
         pAmount += pAmount * (pGain / 100);
-        yoyGrowth.push({ x: addYears(today, i), y: Math.floor(pAmount) });
+        yoyGrowth.push({ x: addYears(today, year), y: Math.floor(pAmount) });
       }
 
       return `$${pAmount.toLocaleString()}`;
@@ -110,28 +147,70 @@ export default function InvestmentCalculator() {
     <Container header={containerHeader}>
       <FormField description="Current amount">
         <Input
-          onChange={({ detail }) =>
-            setCurrentAmount(detail.value.replace(/[^0-9]/g, ""))
-          }
+          onChange={({ detail }) => {
+            detail.value.length > 0
+              ? setCurrentAmount(detail.value.replace(/[^0-9]/g, ""))
+              : setCurrentAmount("");
+          }}
           value={`$${currentAmount && currentAmount.toLocaleString()}` || ""}
         />
       </FormField>
       <FormField description="Projected return">
-        <Input
-          onChange={({ detail }) =>
-            setProjectedGain(detail.value.replace(/[^0-9]/g, ""))
-          }
-          value={(projectedGain && `${projectedGain}%`) || ""}
+        <Slider
+          onChange={({ detail }) => setProjectedGain(detail.value)}
+          value={projectedGain}
+          max={100}
+          min={0}
         />
       </FormField>
       <FormField description="Years">
-        <Input
-          onChange={({ detail }) =>
-            setYearsOfGrowth(detail.value.replace(/[^0-9]/g, ""))
-          }
-          value={yearsOfGrowth || ""}
+        <Slider
+          onChange={({ detail }) => setYearsOfGrowth(detail.value)}
+          value={yearsOfGrowth}
+          max={100}
+          min={0}
         />
       </FormField>
+      {advanced && (
+        <>
+          <FormField description="Monthly contribution">
+            <Slider
+              onChange={({ detail }) => setMonthlyContribution(detail.value)}
+              value={monthlyContribution}
+              max={5000}
+              min={0}
+            />
+          </FormField>
+          <FormField description="Year contributions stop">
+            <Slider
+              onChange={({ detail }) => setYearContributionsStop(detail.value)}
+              value={yearContributionsStop}
+              max={yearsOfGrowth}
+              min={0}
+            />
+          </FormField>
+          <FormField description="Year withdrawals begin">
+            <Slider
+              onChange={({ detail }) => setYearWithdrawalsBegin(detail.value)}
+              value={
+                yearWithdrawalsBegin === 0.9
+                  ? yearsOfGrowth
+                  : yearWithdrawalsBegin
+              }
+              max={yearsOfGrowth}
+              min={0}
+            />
+          </FormField>
+          <FormField description="Monthly withdrawals">
+            <Slider
+              onChange={({ detail }) => setMonthlyWithdrawal(detail.value)}
+              value={monthlyWithdrawal}
+              max={maxMonthlyWithdrawal}
+              min={0}
+            />
+          </FormField>
+        </>
+      )}
       <br></br>
       <br></br>
       {lineChart}
