@@ -43,7 +43,7 @@ export default function InvestmentCalculator() {
     number | undefined
   >(yearsOfGrowthI);
   const yoyGrowthI: { x: Date; y: number }[] = [];
-  const maxMonthlyWithdrawalI = 10000;
+  const maxMonthlyWithdrawalI = 20000;
   const [yearInvestmentBegins, setYearInvestmentBegins] = useState<number>(0.9);
   //
   console.log(yoyGrowth);
