@@ -6,22 +6,24 @@ import {
   Outlet,
 } from "react-router-dom";
 import { USE_BROWSER_ROUTER } from "./common/constants";
-import GlobalHeader from "./components/global-header";
+// import GlobalHeader from "./components/global-header";
 import DashboardPage from "./pages/dashboard/dashboard-page";
 import ViewItemPage from "./pages/investment-calculator/view-item/view-item-page";
 import AllItemsPage from "./pages/investment-calculator/all-items/all-items-page";
 import AddItemPage from "./pages/investment-calculator/add-item/add-item-page";
 import NotFound from "./pages/not-found";
 import "./styles/app.scss";
+import { StorageHelper } from "./common/helpers/storage-helper";
+import { Mode } from "@cloudscape-design/global-styles";
 
 export default function App() {
   const Router = USE_BROWSER_ROUTER ? BrowserRouter : HashRouter;
-
+  StorageHelper.applyTheme(Mode.Dark)
   return (
     <div style={{ height: "100%" }}>
       <Router>
-        <GlobalHeader />
-        <div style={{ height: "56px", backgroundColor: "#000716" }}>&nbsp;</div>
+        {/* <GlobalHeader /> */}
+        {/* <div style={{ height: "56px", backgroundColor: "#000716" }}>&nbsp;</div> */}
         <div>
           <Routes>
             <Route index path="/" element={<DashboardPage />} />

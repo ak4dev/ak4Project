@@ -5,7 +5,7 @@ import { StorageHelper } from "../common/helpers/storage-helper";
 import { APP_NAME } from "../common/constants";
 
 export default function GlobalHeader() {
-  const [theme, setTheme] = useState<Mode>(StorageHelper.getTheme());
+  const [theme, setTheme] = useState<Mode>(StorageHelper.applyTheme(Mode.Dark));
 
   const onChangeThemeClick = () => {
     if (theme === Mode.Dark) {
