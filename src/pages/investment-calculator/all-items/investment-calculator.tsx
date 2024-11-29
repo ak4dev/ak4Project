@@ -37,15 +37,38 @@ export default function InvestmentCalculator() {
   const [yearsOfGrowthI, setYearsOfGrowthI] = useState<number>(30);
   const [monthlyContributionI, setMonthlyContributionI] = useState<number>(0);
   const [monthlyWithdrawalI, setMonthlyWithdrawalI] = useState<number>(0);
-  const [yearWithdrawalsBeginI, setYearWithdrawalsBeginI] = useState<number>(0.9);
+  const [yearWithdrawalsBeginI, setYearWithdrawalsBeginI] =
+    useState<number>(0.9);
   const [yearContributionsStopI, setYearContributionsStopI] = useState<
     number | undefined
   >(yearsOfGrowthI);
   const yoyGrowthI: { x: Date; y: number }[] = [];
   const maxMonthlyWithdrawalI = 10000;
-  const [yearInvestmentBegins, setYearInvestmentBegins] = useState<number>(.9)
+  const [yearInvestmentBegins, setYearInvestmentBegins] = useState<number>(0.9);
   //
   console.log(yoyGrowth);
+  const investmentTwoTotal = calculateGrowth(
+    currentAmountI,
+    projectedGainI,
+    yearsOfGrowthI,
+    yearWithdrawalsBeginI,
+    monthlyWithdrawalI,
+    monthlyContributionI,
+    yearContributionsStopI,
+    yoyGrowthI,
+    yearInvestmentBegins
+  )
+  const investmentOneTotal = calculateGrowth(
+    currentAmount,
+    projectedGain,
+    yearsOfGrowth,
+    yearWithdrawalsBegin,
+    monthlyWithdrawal,
+    monthlyContribution,
+    yearContributionsStop,
+    yoyGrowth,
+    undefined
+  )
   const containerHeader = (
     <Grid>
       <Header>
@@ -66,6 +89,7 @@ export default function InvestmentCalculator() {
           title: "",
           type: "line",
           data: yoyGrowth,
+          color: parseInt(investmentOneTotal.replace('$', "")) > 0 ? "cyan" : "red",
           valueFormatter: function o(e) {
             return Math.abs(e) >= 1e9
               ? "$" + (e / 1e9).toFixed(1).replace(/\.0$/, "") + "B"
@@ -79,6 +103,7 @@ export default function InvestmentCalculator() {
         {
           title: "",
           type: "line",
+          color: parseInt(investmentTwoTotal.replace('$', "")) > 0 ? "green" : "red",
           data: yoyGrowthI,
           valueFormatter: function o(e) {
             return Math.abs(e) >= 1e9
@@ -146,17 +171,17 @@ export default function InvestmentCalculator() {
     mnthlyWthdrwl: number,
     mnthlyCntrbtn: number,
     yrCntrbtnStps: number | undefined,
-    growthMatrix: {x: Date, y: number}[],
+    growthMatrix: { x: Date; y: number }[],
     secondInvestmentStart: number | undefined
   ): string {
     const today = new Date();
     if (amount && projGain && yearsOfGrowth) {
       var pAmount = parseInt(amount) || 0;
       const pGain = projGain;
-      const yearWithdrawalsBegin = yrWthdrwlsBegin
-      const monthlyWithdrawal = mnthlyWthdrwl
-      const monthlyContribution = mnthlyCntrbtn
-      const yearContributionsStop = yrCntrbtnStps
+      const yearWithdrawalsBegin = yrWthdrwlsBegin;
+      const monthlyWithdrawal = mnthlyWthdrwl;
+      const monthlyContribution = mnthlyCntrbtn;
+      const yearContributionsStop = yrCntrbtnStps;
       for (let year = 0; year < yearsOfGrowth; year++) {
         for (let month = 0; month < 12; month++) {
           if (advanced && monthlyWithdrawal && yearWithdrawalsBegin) {
@@ -174,14 +199,19 @@ export default function InvestmentCalculator() {
           }
         }
         pAmount += pAmount * (pGain / 100);
-        if (!secondInvestmentStart || (secondInvestmentStart && year >= secondInvestmentStart)) {
-        growthMatrix.push({ x: addYears(today, year), y: Math.floor(pAmount) });
+        if (
+          !secondInvestmentStart ||
+          (secondInvestmentStart && year >= secondInvestmentStart)
+        ) {
+          growthMatrix.push({
+            x: addYears(today, year),
+            y: Math.floor(pAmount),
+          });
         }
       }
 
       return `$${pAmount.toLocaleString()}`;
-    } 
-  else {
+    } else {
       return "";
     }
   }
@@ -271,9 +301,15 @@ export default function InvestmentCalculator() {
       )}
       <br></br>
       <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
+      <br></br>
 
       <TextContent>
-        <h3>{calculateGrowth(currentAmount, projectedGain, yearsOfGrowth, yearWithdrawalsBegin, monthlyWithdrawal, monthlyContribution, yearContributionsStop, yoyGrowth, undefined)}</h3>
+        <h3>
+          {investmentOneTotal}
+        </h3>
       </TextContent>
     </Box>
   );
@@ -310,17 +346,18 @@ export default function InvestmentCalculator() {
         />
       </FormField>
       {advanced && (
-        <><FormField
-        description={`Year investment begins (${yearInvestmentBegins})`}
-      >
-        <Slider
-          onChange={({ detail }) => setYearInvestmentBegins(detail.value)}
-          value={yearInvestmentBegins}
-          max={yearsOfGrowth}
-          min={0}
-          tickMarks
-        />
-      </FormField>
+        <>
+          <FormField
+            description={`Year investment begins (${yearInvestmentBegins})`}
+          >
+            <Slider
+              onChange={({ detail }) => setYearInvestmentBegins(detail.value)}
+              value={yearInvestmentBegins}
+              max={yearsOfGrowth}
+              min={0}
+              tickMarks
+            />
+          </FormField>
 
           <FormField
             description={`Monthly contribution ($${monthlyContributionI})`}
@@ -361,7 +398,9 @@ export default function InvestmentCalculator() {
               tickMarks
             />
           </FormField>
-          <FormField description={`Monthly withdrawal ($${monthlyWithdrawalI})`}>
+          <FormField
+            description={`Monthly withdrawal ($${monthlyWithdrawalI})`}
+          >
             <Slider
               onChange={({ detail }) => setMonthlyWithdrawalI(detail.value)}
               value={monthlyWithdrawalI}
@@ -376,7 +415,9 @@ export default function InvestmentCalculator() {
       <br></br>
 
       <TextContent>
-        <h3>{calculateGrowth(currentAmountI, projectedGainI, yearsOfGrowthI, yearWithdrawalsBeginI, monthlyWithdrawalI, monthlyContributionI, yearContributionsStopI, yoyGrowthI, yearInvestmentBegins)}</h3>
+        <h3>
+          {investmentTwoTotal}
+        </h3>
       </TextContent>
     </Box>
   );
