@@ -10,6 +10,7 @@ import {
   Slider,
   TextContent,
   Toggle,
+  ToggleButton,
 } from "@cloudscape-design/components";
 import { addYears } from "date-fns";
 import { useState } from "react";
@@ -47,17 +48,7 @@ export default function InvestmentCalculator() {
   const [yearInvestmentBegins, setYearInvestmentBegins] = useState<number>(0.9);
   //
   console.log(yoyGrowth);
-  const investmentTwoTotal = calculateGrowth(
-    currentAmountI,
-    projectedGainI,
-    yearsOfGrowthI,
-    yearWithdrawalsBeginI,
-    monthlyWithdrawalI,
-    monthlyContributionI,
-    yearContributionsStopI,
-    yoyGrowthI,
-    yearInvestmentBegins
-  )
+  const [rollOver, setRollOver] = useState<boolean>(false); // Rolls investment 1 > Investment 2 at end of 'years'
   const investmentOneTotal = calculateGrowth(
     currentAmount,
     projectedGain,
@@ -68,7 +59,41 @@ export default function InvestmentCalculator() {
     yearContributionsStop,
     yoyGrowth,
     undefined
-  )
+  );
+  const investmentTwoTotal = calculateGrowth(
+    currentAmountI,
+    projectedGainI,
+    yearsOfGrowthI,
+    yearWithdrawalsBeginI,
+    monthlyWithdrawalI,
+    monthlyContributionI,
+    yearContributionsStopI,
+    yoyGrowthI,
+    yearInvestmentBegins,
+    rollOver,
+    parseInt(investmentOneTotal.replace("$", "")),
+    yearsOfGrowth
+  );
+  const yearInvestmentOneAtZero =
+    yoyGrowth.filter((yearXy) => {
+      return yearXy.y <= 0;
+    }) &&
+    yoyGrowth.filter((yearXy) => {
+      return yearXy.y <= 0;
+    })[0] &&
+    yoyGrowth.filter((yearXy) => {
+      return yearXy.y <= 0;
+    })[0].x;
+    const yearInvestmentTwoAtZero =
+    yoyGrowthI.filter((yearXy) => {
+      return yearXy.y <= 0;
+    }) &&
+    yoyGrowthI.filter((yearXy) => {
+      return yearXy.y <= 0;
+    })[0] &&
+    yoyGrowthI.filter((yearXy) => {
+      return yearXy.y <= 0;
+    })[0].x;
   const containerHeader = (
     <Grid>
       <Header>
@@ -86,10 +111,11 @@ export default function InvestmentCalculator() {
     <LineChart
       series={[
         {
-          title: "",
+          title: "Investment A",
           type: "line",
           data: yoyGrowth,
-          color: parseInt(investmentOneTotal.replace('$', "")) > 0 ? "cyan" : "red",
+          color:
+            parseInt(investmentOneTotal.replace("$", "")) > 0 ? "cyan" : "red",
           valueFormatter: function o(e) {
             return Math.abs(e) >= 1e9
               ? "$" + (e / 1e9).toFixed(1).replace(/\.0$/, "") + "B"
@@ -101,9 +127,10 @@ export default function InvestmentCalculator() {
           },
         },
         {
-          title: "",
+          title: "Investment B",
           type: "line",
-          color: parseInt(investmentTwoTotal.replace('$', "")) > 0 ? "green" : "red",
+          color:
+            parseInt(investmentTwoTotal.replace("$", "")) > 0 ? "green" : "red",
           data: yoyGrowthI,
           valueFormatter: function o(e) {
             return Math.abs(e) >= 1e9
@@ -114,6 +141,25 @@ export default function InvestmentCalculator() {
               ? (e / 1e3).toFixed(1).replace(/\.0$/, "") + "K"
               : "$" + e.toFixed(2);
           },
+        },
+        {
+          title: `Rollover @ yr${yearsOfGrowth}`,
+          type: "threshold",
+          x: yoyGrowth[yearsOfGrowth - 1].x,
+        },
+        {
+          title: `Investment A = 0 on ${
+            yearInvestmentOneAtZero && yearInvestmentOneAtZero.toDateString()}`,
+          type: "threshold",
+          x:
+          yearInvestmentOneAtZero
+        },
+        {
+          title: `Investment B = 0 on ${
+            yearInvestmentTwoAtZero && yearInvestmentTwoAtZero.toDateString()}`,
+          type: "threshold",
+          x:
+          yearInvestmentTwoAtZero
         },
       ]}
       yScaleType="linear"
@@ -172,7 +218,10 @@ export default function InvestmentCalculator() {
     mnthlyCntrbtn: number,
     yrCntrbtnStps: number | undefined,
     growthMatrix: { x: Date; y: number }[],
-    secondInvestmentStart: number | undefined
+    secondInvestmentStart: number | undefined,
+    rollOver?: boolean,
+    investmentToRoll?: number,
+    yearToRoll?: number
   ): string {
     const today = new Date();
     if (amount && projGain && yearsOfGrowth) {
@@ -199,6 +248,10 @@ export default function InvestmentCalculator() {
           }
         }
         pAmount += pAmount * (pGain / 100);
+        if (rollOver && investmentToRoll && yearToRoll == year) {
+          console.log(`Rolling ${year}`, yoyGrowth[year - 1]);
+          pAmount += yoyGrowth[year - 1].y;
+        }
         if (
           !secondInvestmentStart ||
           (secondInvestmentStart && year >= secondInvestmentStart)
@@ -297,6 +350,14 @@ export default function InvestmentCalculator() {
               min={0}
             />
           </FormField>
+          <ToggleButton
+            onChange={({ detail }) => setRollOver(detail.pressed)}
+            pressed={rollOver}
+            iconName="arrow-right"
+            pressedIconName="angle-right-double"
+          >
+            Roll over
+          </ToggleButton>
         </>
       )}
       <br></br>
@@ -304,12 +365,9 @@ export default function InvestmentCalculator() {
       <br></br>
       <br></br>
       <br></br>
-      <br></br>
 
       <TextContent>
-        <h3>
-          {investmentOneTotal}
-        </h3>
+        <h3>{investmentOneTotal}</h3>
       </TextContent>
     </Box>
   );
@@ -415,9 +473,7 @@ export default function InvestmentCalculator() {
       <br></br>
 
       <TextContent>
-        <h3>
-          {investmentTwoTotal}
-        </h3>
+        <h3>{investmentTwoTotal}</h3>
       </TextContent>
     </Box>
   );
