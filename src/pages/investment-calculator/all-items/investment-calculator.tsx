@@ -143,7 +143,7 @@ export default function InvestmentCalculator() {
           },
         },
         {
-          title: `Rollover @ yr${yearsOfGrowth}`,
+          title: `Rollover on Y${yearsOfGrowth}`,
           type: "threshold",
           x: yoyGrowth[yearsOfGrowth - 1].x,
         },
@@ -165,13 +165,13 @@ export default function InvestmentCalculator() {
       yScaleType="linear"
       i18nStrings={{
         xTickFormatter: (e) =>
-          e
+          `${e
             .toLocaleDateString("en-US", {
               month: "short",
               year: "numeric",
             })
             .split(",")
-            .join("\n"),
+            .join("\n")}`,
         yTickFormatter: function o(e) {
           return Math.abs(e) >= 1e9
             ? "$" + (e / 1e9).toFixed(1).replace(/\.0$/, "") + "B"
