@@ -1,7 +1,7 @@
-import { Mode, applyMode } from "@cloudscape-design/global-styles";
-import { NavigationPanelState } from "../types";
+import { Mode, applyMode } from '@cloudscape-design/global-styles';
+import { NavigationPanelState } from '../types';
 
-const PREFIX = "example-app";
+const PREFIX = 'example-app';
 const THEME_STORAGE_NAME = `${PREFIX}-theme`;
 const NAVIGATION_PANEL_STATE_STORAGE_NAME = `${PREFIX}-navigation-panel-state`;
 
@@ -17,10 +17,7 @@ export abstract class StorageHelper {
     localStorage.setItem(THEME_STORAGE_NAME, theme);
     applyMode(theme);
 
-    document.documentElement.style.setProperty(
-      "--app-color-scheme",
-      theme === Mode.Dark ? "dark" : "light"
-    );
+    document.documentElement.style.setProperty('--app-color-scheme', theme === Mode.Dark ? 'dark' : 'light');
 
     return theme;
   }

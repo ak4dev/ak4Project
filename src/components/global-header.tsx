@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { TopNavigation } from "@cloudscape-design/components";
-import { Mode } from "@cloudscape-design/global-styles";
-import { StorageHelper } from "../common/helpers/storage-helper";
-import { APP_NAME } from "../common/constants";
+import { useState } from 'react';
+import { TopNavigation } from '@cloudscape-design/components';
+import { Mode } from '@cloudscape-design/global-styles';
+import { StorageHelper } from '../common/helpers/storage-helper';
+import { APP_NAME } from '../common/constants';
 
 export default function GlobalHeader() {
   const [theme, setTheme] = useState<Mode>(StorageHelper.applyTheme(Mode.Dark));
@@ -16,19 +16,16 @@ export default function GlobalHeader() {
   };
 
   return (
-    <div
-      style={{ zIndex: 1002, top: 0, left: 0, right: 0, position: "fixed" }}
-      id="awsui-top-navigation"
-    >
+    <div style={{ zIndex: 1002, top: 0, left: 0, right: 0, position: 'fixed' }} id="awsui-top-navigation">
       <TopNavigation
         identity={{
-          href: "/",
-          logo: { src: "/images/logo.png", alt: `${APP_NAME}` },
+          href: '/',
+          logo: { src: '/images/logo.png', alt: `${APP_NAME}` },
         }}
         utilities={[
           {
-            type: "button",
-            text: theme === Mode.Dark ? "Light Mode" : "Dark Mode",
+            type: 'button',
+            text: theme === Mode.Dark ? 'Light Mode' : 'Dark Mode',
             onClick: onChangeThemeClick,
           },
         ]}

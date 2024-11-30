@@ -2,14 +2,12 @@ export abstract class Utils {
   static promiseSetTimeout(duration: number) {
     return new Promise((resolve) => {
       setTimeout(() => {
-        resolve("Done");
+        resolve('Done');
       }, duration);
     });
   }
 
-  static urlSearchParamsToRecord(
-    params: URLSearchParams
-  ): Record<string, string> {
+  static urlSearchParamsToRecord(params: URLSearchParams): Record<string, string> {
     const record: Record<string, string> = {};
 
     for (const [key, value] of params.entries()) {

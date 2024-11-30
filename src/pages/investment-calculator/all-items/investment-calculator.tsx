@@ -11,38 +11,29 @@ import {
   TextContent,
   Toggle,
   ToggleButton,
-} from "@cloudscape-design/components";
-import { addYears } from "date-fns";
-import { useState } from "react";
+} from '@cloudscape-design/components';
+import { addYears } from 'date-fns';
+import { useState } from 'react';
 
 export default function InvestmentCalculator() {
   const [advanced, setAdvanced] = useState<boolean>(false);
-  const [currentAmount, setCurrentAmount] = useState<string | undefined>(
-    "10000"
-  );
+  const [currentAmount, setCurrentAmount] = useState<string | undefined>('10000');
   const [projectedGain, setProjectedGain] = useState<number>(10);
   const [yearsOfGrowth, setYearsOfGrowth] = useState<number>(30);
   const [monthlyContribution, setMonthlyContribution] = useState<number>(0);
   const [monthlyWithdrawal, setMonthlyWithdrawal] = useState<number>(0);
   const [yearWithdrawalsBegin, setYearWithdrawalsBegin] = useState<number>(0.9);
-  const [yearContributionsStop, setYearContributionsStop] = useState<
-    number | undefined
-  >(yearsOfGrowth);
+  const [yearContributionsStop, setYearContributionsStop] = useState<number | undefined>(yearsOfGrowth);
   const yoyGrowth: { x: Date; y: number }[] = [];
   const maxMonthlyWithdrawal = 10000;
   // Calc 2
-  const [currentAmountI, setCurrentAmountI] = useState<string | undefined>(
-    "10000"
-  );
+  const [currentAmountI, setCurrentAmountI] = useState<string | undefined>('10000');
   const [projectedGainI, setProjectedGainI] = useState<number>(10);
   const [yearsOfGrowthI, setYearsOfGrowthI] = useState<number>(30);
   const [monthlyContributionI, setMonthlyContributionI] = useState<number>(0);
   const [monthlyWithdrawalI, setMonthlyWithdrawalI] = useState<number>(0);
-  const [yearWithdrawalsBeginI, setYearWithdrawalsBeginI] =
-    useState<number>(0.9);
-  const [yearContributionsStopI, setYearContributionsStopI] = useState<
-    number | undefined
-  >(yearsOfGrowthI);
+  const [yearWithdrawalsBeginI, setYearWithdrawalsBeginI] = useState<number>(0.9);
+  const [yearContributionsStopI, setYearContributionsStopI] = useState<number | undefined>(yearsOfGrowthI);
   const yoyGrowthI: { x: Date; y: number }[] = [];
   const maxMonthlyWithdrawalI = 20000;
   const [yearInvestmentBegins, setYearInvestmentBegins] = useState<number>(0.9);
@@ -58,7 +49,7 @@ export default function InvestmentCalculator() {
     monthlyContribution,
     yearContributionsStop,
     yoyGrowth,
-    undefined
+    undefined,
   );
   const investmentTwoTotal = calculateGrowth(
     currentAmountI,
@@ -71,8 +62,8 @@ export default function InvestmentCalculator() {
     yoyGrowthI,
     yearInvestmentBegins,
     rollOver,
-    parseInt(investmentOneTotal.replace("$", "")),
-    yearsOfGrowth
+    parseInt(investmentOneTotal.replace('$', '')),
+    yearsOfGrowth,
   );
   const yearInvestmentOneAtZero =
     yoyGrowth.filter((yearXy) => {
@@ -84,7 +75,7 @@ export default function InvestmentCalculator() {
     yoyGrowth.filter((yearXy) => {
       return yearXy.y <= 0;
     })[0].x;
-    const yearInvestmentTwoAtZero =
+  const yearInvestmentTwoAtZero =
     yoyGrowthI.filter((yearXy) => {
       return yearXy.y <= 0;
     }) &&
@@ -98,10 +89,7 @@ export default function InvestmentCalculator() {
     <Grid>
       <Header>
         Investment Calculator
-        <Toggle
-          onChange={({ detail }) => setAdvanced(detail.checked)}
-          checked={advanced}
-        >
+        <Toggle onChange={({ detail }) => setAdvanced(detail.checked)} checked={advanced}>
           Advanced
         </Toggle>
       </Header>
@@ -111,75 +99,69 @@ export default function InvestmentCalculator() {
     <LineChart
       series={[
         {
-          title: "Investment A",
-          type: "line",
+          title: 'Investment A',
+          type: 'line',
           data: yoyGrowth,
-          color:
-            parseInt(investmentOneTotal.replace("$", "")) > 0 ? "cyan" : "red",
+          color: parseInt(investmentOneTotal.replace('$', '')) > 0 ? 'cyan' : 'red',
           valueFormatter: function o(e) {
             return Math.abs(e) >= 1e9
-              ? "$" + (e / 1e9).toFixed(1).replace(/\.0$/, "") + "B"
+              ? '$' + (e / 1e9).toFixed(1).replace(/\.0$/, '') + 'B'
               : Math.abs(e) >= 1e6
-              ? "$" + (e / 1e6).toFixed(1).replace(/\.0$/, "") + "M"
-              : Math.abs(e) >= 1e3
-              ? (e / 1e3).toFixed(1).replace(/\.0$/, "") + "K"
-              : "$" + e.toFixed(2);
+                ? '$' + (e / 1e6).toFixed(1).replace(/\.0$/, '') + 'M'
+                : Math.abs(e) >= 1e3
+                  ? (e / 1e3).toFixed(1).replace(/\.0$/, '') + 'K'
+                  : '$' + e.toFixed(2);
           },
         },
         {
-          title: "Investment B",
-          type: "line",
-          color:
-            parseInt(investmentTwoTotal.replace("$", "")) > 0 ? "green" : "red",
+          title: 'Investment B',
+          type: 'line',
+          color: parseInt(investmentTwoTotal.replace('$', '')) > 0 ? 'green' : 'red',
           data: yoyGrowthI,
           valueFormatter: function o(e) {
             return Math.abs(e) >= 1e9
-              ? "$" + (e / 1e9).toFixed(1).replace(/\.0$/, "") + "B"
+              ? '$' + (e / 1e9).toFixed(1).replace(/\.0$/, '') + 'B'
               : Math.abs(e) >= 1e6
-              ? "$" + (e / 1e6).toFixed(1).replace(/\.0$/, "") + "M"
-              : Math.abs(e) >= 1e3
-              ? (e / 1e3).toFixed(1).replace(/\.0$/, "") + "K"
-              : "$" + e.toFixed(2);
+                ? '$' + (e / 1e6).toFixed(1).replace(/\.0$/, '') + 'M'
+                : Math.abs(e) >= 1e3
+                  ? (e / 1e3).toFixed(1).replace(/\.0$/, '') + 'K'
+                  : '$' + e.toFixed(2);
           },
         },
         {
           title: `Rollover on Y${yearsOfGrowth}`,
-          type: "threshold",
+          type: 'threshold',
           x: yoyGrowth[yearsOfGrowth - 1].x,
         },
         {
-          title: `Investment A = 0 on ${
-            yearInvestmentOneAtZero && yearInvestmentOneAtZero.toDateString()}`,
-          type: "threshold",
-          x:
-          yearInvestmentOneAtZero
+          title: `Investment A = 0 on ${yearInvestmentOneAtZero && yearInvestmentOneAtZero.toDateString()}`,
+          type: 'threshold',
+          x: yearInvestmentOneAtZero,
         },
         {
-          title: `Investment B = 0 on ${
-            yearInvestmentTwoAtZero && yearInvestmentTwoAtZero.toDateString()}`,
-          type: "threshold",
-          x:
-          yearInvestmentTwoAtZero
+          title: `Investment B = 0 on ${yearInvestmentTwoAtZero && yearInvestmentTwoAtZero.toDateString()}`,
+          type: 'threshold',
+          x: yearInvestmentTwoAtZero,
         },
       ]}
       yScaleType="linear"
       i18nStrings={{
         xTickFormatter: (e) =>
           `${e
-            .toLocaleDateString("en-US", {
-              month: "short",
-              year: "numeric",
+            .toLocaleDateString('en-US', {
+              month: 'short',
+              year: 'numeric',
             })
-            .split(",")
-            .join("\n")}`,
+            .split(',')
+            .join('\n')}`,
         yTickFormatter: function o(e) {
           return Math.abs(e) >= 1e9
-            ? "$" + (e / 1e9).toFixed(1).replace(/\.0$/, "") + "B"
+            ? '$' + (e / 1e9).toFixed(1).replace(/\.0$/, '') + 'B'
             : Math.abs(e) >= 1e6
-            ? "$" + (e / 1e6).toFixed(1).replace(/\.0$/, "") + "M"
-            : Math.abs(e) >= 1e3
-            ? "$" + (e / 1e3).toFixed(1).replace(/\.0$/, "") + "K"
-            : "$" + e.toFixed(2);
+              ? '$' + (e / 1e6).toFixed(1).replace(/\.0$/, '') + 'M'
+              : Math.abs(e) >= 1e3
+                ? '$' + (e / 1e3).toFixed(1).replace(/\.0$/, '') + 'K'
+                : '$' + e.toFixed(2);
         },
       }}
       ariaLabel="Single data series line chart"
@@ -221,11 +203,11 @@ export default function InvestmentCalculator() {
     secondInvestmentStart: number | undefined,
     rollOver?: boolean,
     investmentToRoll?: number,
-    yearToRoll?: number
+    yearToRoll?: number,
   ): string {
     const today = new Date();
     if (amount && projGain && yearsOfGrowth) {
-      var pAmount = parseInt(amount) || 0;
+      let pAmount = parseInt(amount) || 0;
       const pGain = projGain;
       const yearWithdrawalsBegin = yrWthdrwlsBegin;
       const monthlyWithdrawal = mnthlyWthdrwl;
@@ -238,10 +220,7 @@ export default function InvestmentCalculator() {
               pAmount -= monthlyWithdrawal;
             }
           }
-          if (
-            (advanced && !yearContributionsStop) ||
-            !(yearContributionsStop && year > yearContributionsStop)
-          ) {
+          if ((advanced && !yearContributionsStop) || !(yearContributionsStop && year > yearContributionsStop)) {
             pAmount += monthlyContribution;
             pAmount += monthlyContribution * (pGain / 100);
             console.log(`pAmount at year ${year}, month ${month}:`, pAmount);
@@ -252,10 +231,7 @@ export default function InvestmentCalculator() {
           console.log(`Rolling ${year}`, yoyGrowth[year - 1]);
           pAmount += yoyGrowth[year - 1].y;
         }
-        if (
-          !secondInvestmentStart ||
-          (secondInvestmentStart && year >= secondInvestmentStart)
-        ) {
+        if (!secondInvestmentStart || (secondInvestmentStart && year >= secondInvestmentStart)) {
           growthMatrix.push({
             x: addYears(today, year),
             y: Math.floor(pAmount),
@@ -265,7 +241,7 @@ export default function InvestmentCalculator() {
 
       return `$${pAmount.toLocaleString()}`;
     } else {
-      return "";
+      return '';
     }
   }
   const investmentCalcOne = advanced && (
@@ -273,16 +249,12 @@ export default function InvestmentCalculator() {
       <FormField description="Principal amount">
         <Input
           onChange={({ detail }) => {
-            detail.value.length > 0
-              ? setCurrentAmount(detail.value.replace(/[^0-9]/g, ""))
-              : setCurrentAmount("");
+            detail.value.length > 0 ? setCurrentAmount(detail.value.replace(/[^0-9]/g, '')) : setCurrentAmount('');
           }}
-          value={`$${currentAmount && currentAmount.toLocaleString()}` || ""}
+          value={`$${currentAmount && currentAmount.toLocaleString()}`}
         />
       </FormField>
-      <FormField
-        description={`Estimated return (${projectedGain.toString()}%)`}
-      >
+      <FormField description={`Estimated return (${projectedGain.toString()}%)`}>
         <Slider
           onChange={({ detail }) => setProjectedGain(detail.value)}
           value={projectedGain}
@@ -302,9 +274,7 @@ export default function InvestmentCalculator() {
       </FormField>
       {advanced && (
         <>
-          <FormField
-            description={`Monthly contribution ($${monthlyContribution})`}
-          >
+          <FormField description={`Monthly contribution ($${monthlyContribution})`}>
             <Slider
               onChange={({ detail }) => setMonthlyContribution(detail.value)}
               value={monthlyContribution}
@@ -313,9 +283,7 @@ export default function InvestmentCalculator() {
               tickMarks
             />
           </FormField>
-          <FormField
-            description={`Year contributions stop (${yearContributionsStop})`}
-          >
+          <FormField description={`Year contributions stop (${yearContributionsStop})`}>
             <Slider
               onChange={({ detail }) => setYearContributionsStop(detail.value)}
               value={yearContributionsStop}
@@ -325,17 +293,11 @@ export default function InvestmentCalculator() {
             />
           </FormField>
           <FormField
-            description={`Year withdrawals begin ${
-              yearWithdrawalsBegin !== 0.9 ? `(${yearWithdrawalsBegin})` : ""
-            }`}
+            description={`Year withdrawals begin ${yearWithdrawalsBegin !== 0.9 ? `(${yearWithdrawalsBegin})` : ''}`}
           >
             <Slider
               onChange={({ detail }) => setYearWithdrawalsBegin(detail.value)}
-              value={
-                yearWithdrawalsBegin === 0.9
-                  ? yearsOfGrowth
-                  : yearWithdrawalsBegin
-              }
+              value={yearWithdrawalsBegin === 0.9 ? yearsOfGrowth : yearWithdrawalsBegin}
               max={yearsOfGrowth}
               min={0}
               tickMarks
@@ -376,16 +338,12 @@ export default function InvestmentCalculator() {
       <FormField description="Principal amount">
         <Input
           onChange={({ detail }) => {
-            detail.value.length > 0
-              ? setCurrentAmountI(detail.value.replace(/[^0-9]/g, ""))
-              : setCurrentAmountI("");
+            detail.value.length > 0 ? setCurrentAmountI(detail.value.replace(/[^0-9]/g, '')) : setCurrentAmountI('');
           }}
-          value={`$${currentAmountI && currentAmountI.toLocaleString()}` || ""}
+          value={`$${currentAmountI && currentAmountI.toLocaleString()}`}
         />
       </FormField>
-      <FormField
-        description={`Estimated return (${projectedGainI.toString()}%)`}
-      >
+      <FormField description={`Estimated return (${projectedGainI.toString()}%)`}>
         <Slider
           onChange={({ detail }) => setProjectedGainI(detail.value)}
           value={projectedGainI}
@@ -405,9 +363,7 @@ export default function InvestmentCalculator() {
       </FormField>
       {advanced && (
         <>
-          <FormField
-            description={`Year investment begins (${yearInvestmentBegins})`}
-          >
+          <FormField description={`Year investment begins (${yearInvestmentBegins})`}>
             <Slider
               onChange={({ detail }) => setYearInvestmentBegins(detail.value)}
               value={yearInvestmentBegins}
@@ -417,9 +373,7 @@ export default function InvestmentCalculator() {
             />
           </FormField>
 
-          <FormField
-            description={`Monthly contribution ($${monthlyContributionI})`}
-          >
+          <FormField description={`Monthly contribution ($${monthlyContributionI})`}>
             <Slider
               onChange={({ detail }) => setMonthlyContributionI(detail.value)}
               value={monthlyContributionI}
@@ -428,9 +382,7 @@ export default function InvestmentCalculator() {
               tickMarks
             />
           </FormField>
-          <FormField
-            description={`Year contributions stop (${yearContributionsStopI})`}
-          >
+          <FormField description={`Year contributions stop (${yearContributionsStopI})`}>
             <Slider
               onChange={({ detail }) => setYearContributionsStopI(detail.value)}
               value={yearContributionsStopI}
@@ -440,25 +392,17 @@ export default function InvestmentCalculator() {
             />
           </FormField>
           <FormField
-            description={`Year withdrawals begin ${
-              yearWithdrawalsBeginI !== 0.9 ? `(${yearWithdrawalsBeginI})` : ""
-            }`}
+            description={`Year withdrawals begin ${yearWithdrawalsBeginI !== 0.9 ? `(${yearWithdrawalsBeginI})` : ''}`}
           >
             <Slider
               onChange={({ detail }) => setYearWithdrawalsBeginI(detail.value)}
-              value={
-                yearWithdrawalsBeginI === 0.9
-                  ? yearsOfGrowthI
-                  : yearWithdrawalsBeginI
-              }
+              value={yearWithdrawalsBeginI === 0.9 ? yearsOfGrowthI : yearWithdrawalsBeginI}
               max={yearsOfGrowthI}
               min={0}
               tickMarks
             />
           </FormField>
-          <FormField
-            description={`Monthly withdrawal ($${monthlyWithdrawalI})`}
-          >
+          <FormField description={`Monthly withdrawal ($${monthlyWithdrawalI})`}>
             <Slider
               onChange={({ detail }) => setMonthlyWithdrawalI(detail.value)}
               value={monthlyWithdrawalI}

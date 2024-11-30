@@ -1,4 +1,4 @@
-import { StatusIndicatorProps } from "@cloudscape-design/components";
+import { StatusIndicatorProps } from '@cloudscape-design/components';
 
 export interface NavigationPanelState {
   collapsed?: boolean;

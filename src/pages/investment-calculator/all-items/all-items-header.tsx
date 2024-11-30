@@ -1,12 +1,7 @@
-import {
-  Button,
-  Header,
-  HeaderProps,
-  SpaceBetween,
-} from "@cloudscape-design/components";
-import RouterButton from "../../../components/wrappers/router-button";
-import { useNavigate } from "react-router-dom";
-import { Item } from "../../../common/types";
+import { Button, Header, HeaderProps, SpaceBetween } from '@cloudscape-design/components';
+import RouterButton from '../../../components/wrappers/router-button';
+import { useNavigate } from 'react-router-dom';
+import { Item } from '../../../common/types';
 
 interface AllItemsPageHeaderProps extends HeaderProps {
   title?: string;
@@ -14,10 +9,7 @@ interface AllItemsPageHeaderProps extends HeaderProps {
   selectedItems: readonly Item[];
 }
 
-export function AllItemsPageHeader({
-  title = "Items",
-  ...props
-}: AllItemsPageHeaderProps) {
+export function AllItemsPageHeader({ title = 'Items', ...props }: AllItemsPageHeaderProps) {
   const navigate = useNavigate();
 
   return (
@@ -29,23 +21,14 @@ export function AllItemsPageHeader({
           <RouterButton
             data-testid="header-btn-view-details"
             disabled={props.selectedItems.length !== 1}
-            onClick={() =>
-              navigate(`/section1/items/${props.selectedItems[0].itemId}`)
-            }
+            onClick={() => navigate(`/section1/items/${props.selectedItems[0].itemId}`)}
           >
             View
           </RouterButton>
-          <RouterButton
-            data-testid="header-btn-view-details"
-            disabled={props.selectedItems.length !== 1}
-          >
+          <RouterButton data-testid="header-btn-view-details" disabled={props.selectedItems.length !== 1}>
             Delete
           </RouterButton>
-          <RouterButton
-            data-testid="header-btn-create"
-            variant="primary"
-            href="/section1/add"
-          >
+          <RouterButton data-testid="header-btn-create" variant="primary" href="/section1/add">
             Add Item
           </RouterButton>
         </SpaceBetween>

@@ -1,14 +1,7 @@
-import {
-  Alert,
-  BreadcrumbGroup,
-  Container,
-  ContentLayout,
-  Header,
-  SpaceBetween,
-} from "@cloudscape-design/components";
-import { useOnFollow } from "../common/hooks/use-on-follow";
-import { APP_NAME } from "../common/constants";
-import BaseAppLayout from "../components/base-app-layout";
+import { Alert, BreadcrumbGroup, Container, ContentLayout, Header, SpaceBetween } from '@cloudscape-design/components';
+import { useOnFollow } from '../common/hooks/use-on-follow';
+import { APP_NAME } from '../common/constants';
+import BaseAppLayout from '../components/base-app-layout';
 
 export default function NotFound() {
   const onFollow = useOnFollow();
@@ -21,11 +14,11 @@ export default function NotFound() {
           items={[
             {
               text: APP_NAME,
-              href: "/",
+              href: '/',
             },
             {
-              text: "Not Found",
-              href: "/not-found",
+              text: 'Not Found',
+              href: '/not-found',
             },
           ]}
           expandAriaLabel="Show path"
@@ -33,9 +26,7 @@ export default function NotFound() {
         />
       }
       content={
-        <ContentLayout
-          header={<Header variant="h1">404. Page Not Found</Header>}
-        >
+        <ContentLayout header={<Header variant="h1">404. Page Not Found</Header>}>
           <SpaceBetween size="l">
             <Container>
               <Alert type="error" header="404. Page Not Found">

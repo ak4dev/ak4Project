@@ -1,4 +1,4 @@
-import { Container, Header } from "@cloudscape-design/components";
+import { Container, Header } from '@cloudscape-design/components';
 
 export default function BlogContainer() {
   return (

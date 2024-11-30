@@ -9,21 +9,21 @@ import {
   StatusIndicator,
   Tabs,
   Textarea,
-} from "@cloudscape-design/components";
-import { APP_NAME } from "../../../common/constants";
-import { useOnFollow } from "../../../common/hooks/use-on-follow";
-import BaseAppLayout from "../../../components/base-app-layout";
-import { useParams, useSearchParams } from "react-router-dom";
-import RouterButton from "../../../components/wrappers/router-button";
-import { useState } from "react";
-import { Utils } from "../../../common/utils";
+} from '@cloudscape-design/components';
+import { APP_NAME } from '../../../common/constants';
+import { useOnFollow } from '../../../common/hooks/use-on-follow';
+import BaseAppLayout from '../../../components/base-app-layout';
+import { useParams, useSearchParams } from 'react-router-dom';
+import RouterButton from '../../../components/wrappers/router-button';
+import { useState } from 'react';
+import { Utils } from '../../../common/utils';
 
 export default function ViewItemPage() {
   const onFollow = useOnFollow();
   const { itemId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [activeTab, setActiveTab] = useState(searchParams.get("tab") || "main");
-  const [value, setValue] = useState("");
+  const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'main');
+  const [value, setValue] = useState('');
 
   return (
     <BaseAppLayout
@@ -34,14 +34,14 @@ export default function ViewItemPage() {
           items={[
             {
               text: APP_NAME,
-              href: "/",
+              href: '/',
             },
             {
-              text: "Items",
-              href: "/section1",
+              text: 'Items',
+              href: '/section1',
             },
             {
-              text: itemId || "",
+              text: itemId || '',
               href: `/section1/items/${itemId}`,
             },
           ]}
@@ -54,9 +54,7 @@ export default function ViewItemPage() {
               variant="h1"
               actions={
                 <SpaceBetween direction="horizontal" size="xs">
-                  <RouterButton data-testid="header-btn-view-details">
-                    Delete
-                  </RouterButton>
+                  <RouterButton data-testid="header-btn-view-details">Delete</RouterButton>
                 </SpaceBetween>
               }
             >
@@ -87,9 +85,7 @@ export default function ViewItemPage() {
                   <div>
                     <Box variant="awsui-key-label">Status</Box>
                     <div>
-                      <StatusIndicator type="in-progress">
-                        In progress
-                      </StatusIndicator>
+                      <StatusIndicator type="in-progress">In progress</StatusIndicator>
                     </div>
                   </div>
                 </SpaceBetween>
@@ -134,15 +130,12 @@ export default function ViewItemPage() {
             <Tabs
               tabs={[
                 {
-                  label: "Main",
-                  id: "main",
+                  label: 'Main',
+                  id: 'main',
                   content: (
                     <Container>
                       <SpaceBetween size="l">
-                        <Header
-                          variant="h2"
-                          actions={<RouterButton>Manage</RouterButton>}
-                        >
+                        <Header variant="h2" actions={<RouterButton>Manage</RouterButton>}>
                           Main
                         </Header>
                         <Textarea
@@ -155,8 +148,8 @@ export default function ViewItemPage() {
                   ),
                 },
                 {
-                  label: "Additional",
-                  id: "additional",
+                  label: 'Additional',
+                  id: 'additional',
                   content: <Container>Additional Tab</Container>,
                 },
               ]}

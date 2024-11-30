@@ -1,4 +1,4 @@
-import { Header, SpaceBetween } from "@cloudscape-design/components";
+import { Header, SpaceBetween } from '@cloudscape-design/components';
 
 export default function DashboardHeader() {
   return (
