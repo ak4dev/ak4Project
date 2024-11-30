@@ -428,6 +428,10 @@ export default function InvestmentCalculator() {
         {investmentCalcTwo}
       </Grid>
       {lineChart}
+      <small>
+        This is a coding project, NOT A FINANCIAL TOOL, and is intended for educational purposes only; calculations are
+        merely approximations and no guarantee should be assumed. <b>USE AT YOUR OWN RISK.</b>
+      </small>
     </Container>
   );
 }
