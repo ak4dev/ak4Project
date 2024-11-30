@@ -429,8 +429,9 @@ export default function InvestmentCalculator() {
       </Grid>
       {lineChart}
       <small>
-        This is a coding project, NOT A FINANCIAL TOOL, and is intended for educational purposes only; calculations are
-        merely approximations and no guarantee should be assumed. <b>USE AT YOUR OWN RISK.</b>
+        This is a coding project, <b>NOT A FINANCIAL TOOL</b>, and is intended for educational purposes only;
+        calculations are merely approximations and no guarantee should be assumed. <b>USE AT YOUR OWN RISK.</b>{' '}
+        Information on this site does not constitute investment or financial advice.
       </small>
     </Container>
   );
