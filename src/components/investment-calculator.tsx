@@ -78,7 +78,7 @@ export default function InvestmentCalculatorComponent() {
     setYearContributionsStop: setYearContributionsStopI,
     growthMatrix: yoyGrowthI,
     maxMonthlyWithdrawal: maxMonthlyWithdrawalI,
-    yearInvestmentBegins: yearInvestmentBegins,
+    // yearInvestmentBegins: yearInvestmentBegins,
     setYearInvestmentBegins: setYearInvestmentBegins,
     investmentToRoll: parseInt(investmentAProps.currentAmount || '0'),
     advanced: advanced,
@@ -336,7 +336,7 @@ export default function InvestmentCalculatorComponent() {
       </FormField>
       {advanced && (
         <>
-          <FormField description={`Year investment begins (${yearInvestmentBegins})`}>
+          {/* <FormField description={`Year investment begins (${yearInvestmentBegins})`}>
             <Slider
               onChange={({ detail }) => setYearInvestmentBegins(detail.value)}
               value={yearInvestmentBegins}
@@ -344,7 +344,7 @@ export default function InvestmentCalculatorComponent() {
               min={0}
               tickMarks
             />
-          </FormField>
+          </FormField> */}
 
           <FormField description={`Monthly contribution ($${monthlyContributionI})`}>
             <Slider
@@ -386,6 +386,9 @@ export default function InvestmentCalculatorComponent() {
           </FormField>
         </>
       )}
+      <br></br>
+      <br></br>
+      <br></br>
       <br></br>
       <br></br>
 
