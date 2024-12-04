@@ -6,7 +6,7 @@ import NotFound from './pages/not-found';
 import './styles/app.scss';
 import { StorageHelper } from './common/helpers/storage-helper';
 import { Mode } from '@cloudscape-design/global-styles';
-import InvestmentCalculatorLayout from './pages/investment-calculator/all-items/all-items-page';
+import InvestmentCalculatorLayout from './pages/investment-calculator/investment-calc-layout';
 
 export default function App() {
   const Router = USE_BROWSER_ROUTER ? BrowserRouter : HashRouter;

@@ -12,10 +12,11 @@ import {
   Toggle,
   ToggleButton,
 } from '@cloudscape-design/components';
-import { addYears } from 'date-fns';
 import { useState } from 'react';
+import { InvestmentCalculatorProps } from '../common/types';
+import { InvestmentCalculator } from '../common/helpers/investment-growth-calculator';
 
-export default function InvestmentCalculator() {
+export default function InvestmentCalculatorComponent() {
   const [advanced, setAdvanced] = useState<boolean>(false);
   const [currentAmount, setCurrentAmount] = useState<string | undefined>('10000');
   const [projectedGain, setProjectedGain] = useState<number>(10);
@@ -26,6 +27,27 @@ export default function InvestmentCalculator() {
   const [yearContributionsStop, setYearContributionsStop] = useState<number | undefined>(yearsOfGrowth);
   const yoyGrowth: { x: Date; y: number }[] = [];
   const maxMonthlyWithdrawal = 10000;
+
+  const investmentAProps: InvestmentCalculatorProps = {
+    currentAmount: currentAmount,
+    setCurrentAmount: setCurrentAmount,
+    projectedGain: projectedGain,
+    setProjectedGain: setProjectedGain,
+    yearsOfGrowth: yearsOfGrowth,
+    setYearsOfGrowth: setYearsOfGrowth,
+    monthlyContribution: monthlyContribution,
+    setMonthlyContribution: setMonthlyContribution,
+    monthlyWithdrawal: monthlyWithdrawal,
+    setMonthlyWithdrawal: setMonthlyWithdrawal,
+    yearWithdrawalsBegin: yearWithdrawalsBegin,
+    setYearWithdrawalsBegin: setYearWithdrawalsBegin,
+    yearContributionsStop: yearContributionsStop,
+    setYearContributionsStop: setYearContributionsStop,
+    growthMatrix: yoyGrowth,
+    advanced: advanced,
+    maxMonthlyWithdrawal: maxMonthlyWithdrawal,
+  };
+
   // Calc 2
   const [currentAmountI, setCurrentAmountI] = useState<string | undefined>('10000');
   const [projectedGainI, setProjectedGainI] = useState<number>(10);
@@ -37,34 +59,38 @@ export default function InvestmentCalculator() {
   const yoyGrowthI: { x: Date; y: number }[] = [];
   const maxMonthlyWithdrawalI = 20000;
   const [yearInvestmentBegins, setYearInvestmentBegins] = useState<number>(0.9);
-  //
-  console.log(yoyGrowth);
   const [rollOver, setRollOver] = useState<boolean>(false); // Rolls investment 1 > Investment 2 at end of 'years'
-  const investmentOneTotal = calculateGrowth(
-    currentAmount,
-    projectedGain,
-    yearsOfGrowth,
-    yearWithdrawalsBegin,
-    monthlyWithdrawal,
-    monthlyContribution,
-    yearContributionsStop,
-    yoyGrowth,
-    undefined,
-  );
-  const investmentTwoTotal = calculateGrowth(
-    currentAmountI,
-    projectedGainI,
-    yearsOfGrowthI,
-    yearWithdrawalsBeginI,
-    monthlyWithdrawalI,
-    monthlyContributionI,
-    yearContributionsStopI,
-    yoyGrowthI,
-    yearInvestmentBegins,
-    rollOver,
-    parseInt(investmentOneTotal.replace('$', '')),
-    yearsOfGrowth,
-  );
+
+  const investmentBProps: InvestmentCalculatorProps = {
+    currentAmount: currentAmountI,
+    setCurrentAmount: setCurrentAmountI,
+    projectedGain: projectedGainI,
+    setProjectedGain: setProjectedGainI,
+    yearsOfGrowth: yearsOfGrowthI,
+    setYearsOfGrowth: setYearsOfGrowthI,
+    monthlyContribution: monthlyContributionI,
+    setMonthlyContribution: setMonthlyContributionI,
+    monthlyWithdrawal: monthlyWithdrawalI,
+    setMonthlyWithdrawal: setMonthlyWithdrawalI,
+    yearWithdrawalsBegin: yearWithdrawalsBeginI,
+    setYearWithdrawalsBegin: setYearWithdrawalsBeginI,
+    yearContributionsStop: yearContributionsStopI,
+    setYearContributionsStop: setYearContributionsStopI,
+    growthMatrix: yoyGrowthI,
+    maxMonthlyWithdrawal: maxMonthlyWithdrawalI,
+    yearInvestmentBegins: yearInvestmentBegins,
+    setYearInvestmentBegins: setYearInvestmentBegins,
+    investmentToRoll: parseInt(investmentAProps.currentAmount || '0'),
+    advanced: advanced,
+    rollOver: rollOver,
+    yearOfRollover: investmentAProps.yearsOfGrowth,
+  };
+  const investmentCalcA = new InvestmentCalculator(investmentAProps);
+  const investmentCalcB = new InvestmentCalculator(investmentBProps);
+  //
+
+  const investmentOneTotal = investmentCalcA.calculateGrowth();
+  const investmentTwoTotal = investmentCalcB.calculateGrowth();
   const yearInvestmentOneAtZero =
     yoyGrowth.filter((yearXy) => {
       return yearXy.y <= 0;
@@ -191,59 +217,6 @@ export default function InvestmentCalculator() {
     />
   );
 
-  function calculateGrowth(
-    amount: string | undefined,
-    projGain: number | undefined,
-    yearsOfGrowth: number | undefined,
-    yrWthdrwlsBegin: number,
-    mnthlyWthdrwl: number,
-    mnthlyCntrbtn: number,
-    yrCntrbtnStps: number | undefined,
-    growthMatrix: { x: Date; y: number }[],
-    secondInvestmentStart: number | undefined,
-    rollOver?: boolean,
-    investmentToRoll?: number,
-    yearToRoll?: number,
-  ): string {
-    const today = new Date();
-    if (amount && projGain && yearsOfGrowth) {
-      let pAmount = parseInt(amount) || 0;
-      const pGain = projGain;
-      const yearWithdrawalsBegin = yrWthdrwlsBegin;
-      const monthlyWithdrawal = mnthlyWthdrwl;
-      const monthlyContribution = mnthlyCntrbtn;
-      const yearContributionsStop = yrCntrbtnStps;
-      for (let year = 0; year < yearsOfGrowth; year++) {
-        for (let month = 0; month < 12; month++) {
-          if (advanced && monthlyWithdrawal && yearWithdrawalsBegin) {
-            if (yearWithdrawalsBegin && year >= yearWithdrawalsBegin) {
-              pAmount -= monthlyWithdrawal;
-            }
-          }
-          if ((advanced && !yearContributionsStop) || !(yearContributionsStop && year > yearContributionsStop)) {
-            pAmount += monthlyContribution;
-            pAmount += monthlyContribution * (pGain / 100);
-            console.log(`pAmount at year ${year}, month ${month}:`, pAmount);
-          }
-        }
-        pAmount += pAmount * (pGain / 100);
-        if (rollOver && investmentToRoll && yearToRoll == year) {
-          console.log(`Rolling ${year}`, yoyGrowth[year - 1]);
-          pAmount += yoyGrowth[year - 1].y;
-        }
-        if (!secondInvestmentStart || (secondInvestmentStart && year >= secondInvestmentStart)) {
-          growthMatrix.push({
-            x: addYears(today, year),
-            y: Math.floor(pAmount),
-          });
-        }
-      }
-
-      return `$${pAmount.toLocaleString()}`;
-    } else {
-      return '';
-    }
-  }
   const investmentCalcOne = advanced && (
     <Box>
       <FormField description="Principal amount">
