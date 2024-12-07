@@ -24,4 +24,11 @@ export interface InvestmentCalculatorProps {
   advanced?: boolean;
   investmentToRoll?: number;
   yearOfRollover?: number;
+  investmentId: string;
+}
+
+export interface DateAmountPair {
+  date: Date;
+  amount: number;
+  investmentId: string;
 }

@@ -7,6 +7,7 @@ import {
   Header,
   Input,
   LineChart,
+  Popover,
   Slider,
   TextContent,
   Toggle,
@@ -15,6 +16,7 @@ import {
 import { useState } from 'react';
 import { InvestmentCalculatorProps } from '../common/types';
 import { InvestmentCalculator } from '../common/helpers/investment-growth-calculator';
+import DateAmountTable from './date-amount-table';
 
 export default function InvestmentCalculatorComponent() {
   const [advanced, setAdvanced] = useState<boolean>(false);
@@ -46,6 +48,7 @@ export default function InvestmentCalculatorComponent() {
     growthMatrix: yoyGrowth,
     advanced: advanced,
     maxMonthlyWithdrawal: maxMonthlyWithdrawal,
+    investmentId: 'investmentA',
   };
 
   // Calc 2
@@ -83,6 +86,7 @@ export default function InvestmentCalculatorComponent() {
     advanced: advanced,
     rollOver: rollOver,
     yearOfRollover: investmentAProps.yearsOfGrowth,
+    investmentId: 'investmentB',
   };
   const investmentCalcB = new InvestmentCalculator(investmentBProps);
   //
@@ -212,7 +216,7 @@ export default function InvestmentCalculatorComponent() {
       }
     />
   );
-
+  const investmentATable = <DateAmountTable items={investmentAProps.growthMatrix.map((entry) => ({investmentId: investmentAProps.investmentId, date: entry.x, amount: entry.y}))} />
   const investmentCalcOne = advanced && (
     <Box>
       <FormField description="Principal amount">
@@ -297,9 +301,9 @@ export default function InvestmentCalculatorComponent() {
       <br></br>
       <br></br>
 
-      <TextContent>
+      <Popover size="medium" position="right" triggerType="custom" content={investmentATable}>
         <h3>{investmentOneTotal}</h3>
-      </TextContent>
+      </Popover>
     </Box>
   );
   const investmentCalcTwo = (
@@ -393,6 +397,7 @@ export default function InvestmentCalculatorComponent() {
       </TextContent>
     </Box>
   );
+  
   return (
     <Container header={containerHeader}>
       <Grid>
