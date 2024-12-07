@@ -91,6 +91,18 @@ export default function InvestmentCalculatorComponent() {
   const investmentCalcB = new InvestmentCalculator(investmentBProps);
   //
   const investmentTwoTotal = investmentCalcB.calculateGrowth();
+  const investmentBTable = (
+    <DateAmountTable
+      items={investmentBProps.growthMatrix.map((entry) => ({
+        investmentId: investmentBProps.investmentId,
+        date: entry.x,
+        amount: entry.y,
+      }))}
+    />
+  );
+  const investmentTwoDisplayText = <Popover size="medium" position="right" triggerType="custom" content={investmentBTable}>
+  <h3>{investmentTwoTotal}</h3>
+</Popover>
   const yearInvestmentOneAtZero =
     yoyGrowth.filter((yearXy) => {
       return yearXy.y <= 0;
@@ -216,7 +228,18 @@ export default function InvestmentCalculatorComponent() {
       }
     />
   );
-  const investmentATable = <DateAmountTable items={investmentAProps.growthMatrix.map((entry) => ({investmentId: investmentAProps.investmentId, date: entry.x, amount: entry.y}))} />
+  const investmentATable = (
+    <DateAmountTable
+      items={investmentAProps.growthMatrix.map((entry) => ({
+        investmentId: investmentAProps.investmentId,
+        date: entry.x,
+        amount: entry.y,
+      }))}
+    />
+  );
+  const investmentOneDisplayText = <Popover size="medium" position="right" triggerType="custom" content={investmentATable}>
+  <h3>{investmentOneTotal}</h3>
+</Popover>
   const investmentCalcOne = advanced && (
     <Box>
       <FormField description="Principal amount">
@@ -301,9 +324,7 @@ export default function InvestmentCalculatorComponent() {
       <br></br>
       <br></br>
 
-      <Popover size="medium" position="right" triggerType="custom" content={investmentATable}>
-        <h3>{investmentOneTotal}</h3>
-      </Popover>
+      {investmentOneDisplayText}
     </Box>
   );
   const investmentCalcTwo = (
@@ -392,12 +413,10 @@ export default function InvestmentCalculatorComponent() {
       <br></br>
       <br></br>
 
-      <TextContent>
-        <h3>{investmentTwoTotal}</h3>
-      </TextContent>
+      {investmentTwoDisplayText}
     </Box>
   );
-  
+
   return (
     <Container header={containerHeader}>
       <Grid>

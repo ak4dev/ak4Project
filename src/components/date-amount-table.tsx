@@ -5,8 +5,7 @@ export interface DateAmountTableProps {
   items: DateAmountPair[];
 }
 export default function DateAmountTable({ items }: DateAmountTableProps) {
-
-const dateAmountTable = (
+  const dateAmountTable = (
     <Table
       items={items}
       stripedRows
@@ -28,6 +27,5 @@ const dateAmountTable = (
     />
   );
 
-  return (
-    <>{dateAmountTable}</>)
+  return <>{dateAmountTable}</>;
 }
