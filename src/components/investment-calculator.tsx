@@ -9,7 +9,6 @@ import {
   LineChart,
   Popover,
   Slider,
-  TextContent,
   Toggle,
   ToggleButton,
 } from '@cloudscape-design/components';
@@ -100,9 +99,11 @@ export default function InvestmentCalculatorComponent() {
       }))}
     />
   );
-  const investmentTwoDisplayText = <Popover size="medium" position="right" triggerType="custom" content={investmentBTable}>
-  <h3>{investmentTwoTotal}</h3>
-</Popover>
+  const investmentTwoDisplayText = (
+    <Popover size="medium" position="right" triggerType="custom" content={investmentBTable}>
+      <h3>{investmentTwoTotal}</h3>
+    </Popover>
+  );
   const yearInvestmentOneAtZero =
     yoyGrowth.filter((yearXy) => {
       return yearXy.y <= 0;
@@ -237,9 +238,11 @@ export default function InvestmentCalculatorComponent() {
       }))}
     />
   );
-  const investmentOneDisplayText = <Popover size="medium" position="right" triggerType="custom" content={investmentATable}>
-  <h3>{investmentOneTotal}</h3>
-</Popover>
+  const investmentOneDisplayText = (
+    <Popover size="medium" position="right" triggerType="custom" content={investmentATable}>
+      <h3>{investmentOneTotal}</h3>
+    </Popover>
+  );
   const investmentCalcOne = advanced && (
     <Box>
       <FormField description="Principal amount">
