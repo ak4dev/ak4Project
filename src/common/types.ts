@@ -20,8 +20,6 @@ export interface InvestmentCalculatorProps {
   setYearContributionsStop: (value: number | undefined) => void;
   growthMatrix: { x: Date; y: number }[];
   maxMonthlyWithdrawal: number;
-  yearInvestmentBegins?: number | undefined;
-  setYearInvestmentBegins?: (value: number) => void;
   rollOver?: boolean;
   advanced?: boolean;
   investmentToRoll?: number;

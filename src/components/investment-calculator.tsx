@@ -58,9 +58,10 @@ export default function InvestmentCalculatorComponent() {
   const [yearContributionsStopI, setYearContributionsStopI] = useState<number | undefined>(yearsOfGrowthI);
   const yoyGrowthI: { x: Date; y: number }[] = [];
   const maxMonthlyWithdrawalI = 20000;
-  const [yearInvestmentBegins, setYearInvestmentBegins] = useState<number>(0.9);
   const [rollOver, setRollOver] = useState<boolean>(false); // Rolls investment 1 > Investment 2 at end of 'years'
 
+  const investmentCalcA = new InvestmentCalculator(investmentAProps);
+  const investmentOneTotal = investmentCalcA.calculateGrowth();
   const investmentBProps: InvestmentCalculatorProps = {
     currentAmount: currentAmountI,
     setCurrentAmount: setCurrentAmountI,
@@ -78,18 +79,13 @@ export default function InvestmentCalculatorComponent() {
     setYearContributionsStop: setYearContributionsStopI,
     growthMatrix: yoyGrowthI,
     maxMonthlyWithdrawal: maxMonthlyWithdrawalI,
-    // yearInvestmentBegins: yearInvestmentBegins,
-    setYearInvestmentBegins: setYearInvestmentBegins,
-    investmentToRoll: parseInt(investmentAProps.currentAmount || '0'),
+    investmentToRoll: investmentAProps.growthMatrix[investmentAProps.growthMatrix.length - 1]?.y ?? 0,
     advanced: advanced,
     rollOver: rollOver,
     yearOfRollover: investmentAProps.yearsOfGrowth,
   };
-  const investmentCalcA = new InvestmentCalculator(investmentAProps);
   const investmentCalcB = new InvestmentCalculator(investmentBProps);
   //
-
-  const investmentOneTotal = investmentCalcA.calculateGrowth();
   const investmentTwoTotal = investmentCalcB.calculateGrowth();
   const yearInvestmentOneAtZero =
     yoyGrowth.filter((yearXy) => {

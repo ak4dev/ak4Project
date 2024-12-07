@@ -13,7 +13,6 @@ export class InvestmentCalculator {
     if (this.props.currentAmount && this.props.projectedGain && this.props.yearsOfGrowth) {
       let pAmount = parseInt(this.props.currentAmount) || 0;
       for (let year = 0; year < this.props.yearsOfGrowth; year++) {
-        console.log(`YEARTEST ${year}:`, this.props.growthMatrix[year - 1]);
         for (let month = 0; month < 12; month++) {
           if (this.props.advanced && this.props.monthlyWithdrawal && this.props.yearWithdrawalsBegin) {
             if (this.props.yearWithdrawalsBegin && year >= this.props.yearWithdrawalsBegin) {
@@ -26,19 +25,13 @@ export class InvestmentCalculator {
           ) {
             pAmount += this.props.monthlyContribution;
             pAmount += this.props.monthlyContribution * (this.props.projectedGain / 100);
-            console.log(`pAmount at year ${year}, month ${month}:`, pAmount);
           }
         }
         pAmount += pAmount * (this.props.projectedGain / 100);
-        console.log(`ROLLTEST`, this.props.rollOver, this.props.investmentToRoll, this.props.yearOfRollover, year);
         if (this.props.rollOver && this.props.investmentToRoll && this.props.yearOfRollover == year) {
-          console.log(`Rolling ${year}`, this.props.growthMatrix && this.props.growthMatrix[year - 1]);
-          pAmount += this.props.growthMatrix[year - 1].y;
+          pAmount += this.props.investmentToRoll;
         }
-        if (
-          !this.props.yearInvestmentBegins ||
-          (this.props.yearInvestmentBegins && year >= this.props.yearInvestmentBegins)
-        ) {
+        if (true) {
           this.props.growthMatrix.push({
             x: addYears(today, year),
             y: Math.floor(pAmount),
