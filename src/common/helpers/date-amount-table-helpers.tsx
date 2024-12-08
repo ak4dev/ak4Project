@@ -39,14 +39,23 @@ export function returnDateElement(dateAmountPair: DateAmountPair, investmentCalc
   // in which case a popover will be returned with the event description
   const year = dateAmountPair.date.getFullYear();
   const yearOfRollover = investmentCalc.props.yearOfRollover;
-  const rolloverDatePair = yearOfRollover &&  investmentCalc.props.growthMatrix[yearOfRollover]
-  const eventInYear = investmentCalc.props.yearOfRollover ? investmentCalc.getGrowthMatrix().filter((entry) => {
-    return (
-      yearOfRollover && rolloverDatePair && 
-      entry.x.getFullYear() === year &&
-      year === rolloverDatePair.x.getFullYear()
-    );
-  }) : [];
+  const rolloverDatePair = yearOfRollover && investmentCalc.props.growthMatrix[yearOfRollover];
+  const investmentToRoll = investmentCalc.props.investmentToRoll;
+  const eventInYear = investmentCalc.props.yearOfRollover
+    ? investmentCalc.getGrowthMatrix().filter((entry) => {
+        return (
+          yearOfRollover &&
+          rolloverDatePair &&
+          entry.x.getFullYear() === year &&
+          year === rolloverDatePair.x.getFullYear()
+        );
+      })
+    : [];
+  const rolledInvestmentPositive = investmentToRoll && investmentToRoll > 0 ? true : false;
+  const eventTextColor = rolledInvestmentPositive ? 'text-status-success' : 'text-status-error';
+  const eventText = rolledInvestmentPositive
+    ? `+${investmentToRoll?.toLocaleString()}`
+    : `-$${investmentToRoll?.toLocaleString().replace('-', '')}`;
   if (eventInYear.length > 0) {
     return (
       <Box color="text-status-info">
@@ -57,7 +66,7 @@ export function returnDateElement(dateAmountPair: DateAmountPair, investmentCalc
           content={
             <div>
               <h4>Year of Rollover</h4>
-              <Box color="text-status-success">+ ${investmentCalc.props.investmentToRoll?.toLocaleString()}</Box>
+              <Box color={eventTextColor}>{eventText}</Box>
             </div>
           }
         >
