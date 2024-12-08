@@ -18,7 +18,7 @@ export interface InvestmentCalculatorProps {
   setMonthlyContribution: (value: number) => void;
   yearContributionsStop: number | undefined;
   setYearContributionsStop: (value: number | undefined) => void;
-  growthMatrix: { x: Date; y: number }[];
+  growthMatrix: LineGraphEntry[];
   maxMonthlyWithdrawal: number;
   rollOver?: boolean;
   advanced?: boolean;
@@ -33,4 +33,10 @@ export interface DateAmountPair {
   amount: number;
   inflationAdjustedAmount: number;
   investmentId: string;
+}
+
+export interface LineGraphEntry {
+  x: Date;
+  y: number;
+  alternateY: number;
 }

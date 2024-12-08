@@ -9,44 +9,60 @@ export class InvestmentCalculator {
   constructor(investmentCalculatorProps: InvestmentCalculatorProps) {
     this.props = investmentCalculatorProps;
   }
-  public calculateGrowth(inflationAdjusted?: boolean | undefined): string {
+  public calculateGrowth(showInflation: boolean): string {
     const thisMonth = this.today.getMonth();
     if (this.props.currentAmount && this.props.projectedGain && this.props.yearsOfGrowth) {
       let pAmount = parseInt(this.props.currentAmount) || 0;
+      let inflationAdjustedAmount = pAmount;
+
       for (let year = 0; year < this.props.yearsOfGrowth; year++) {
         // Calculate monthly changes
         for (let month = year == 0 ? thisMonth : 0; month < 12; month++) {
-          console.log(`pAmount month ${month} year ${year}`, pAmount);
+          // Handle withdrawals for both amounts
           if (this.props.advanced && this.props.monthlyWithdrawal && this.props.yearWithdrawalsBegin) {
             if (this.props.yearWithdrawalsBegin && year >= this.props.yearWithdrawalsBegin) {
-              pAmount -= this.props.monthlyWithdrawal; // Handles monthly withdrawals
+              pAmount -= this.props.monthlyWithdrawal;
+              inflationAdjustedAmount -= this.props.monthlyWithdrawal;
             }
           }
+
+          // Apply growth rate
           pAmount += (pAmount * (this.props.projectedGain / 100)) / 12;
+          inflationAdjustedAmount += (inflationAdjustedAmount * (this.props.projectedGain / 100)) / 12;
+
+          // Handle contributions
           if (
             (this.props.advanced && !this.props.yearContributionsStop) ||
             !(this.props.yearContributionsStop && year > this.props.yearContributionsStop)
           ) {
-            pAmount += this.props.monthlyContribution; // Handles adding monthly contributions
+            pAmount += this.props.monthlyContribution;
             pAmount += this.props.monthlyContribution * (this.props.projectedGain / 100);
+
+            inflationAdjustedAmount += this.props.monthlyContribution;
+            inflationAdjustedAmount += this.props.monthlyContribution * (this.props.projectedGain / 100);
           }
         }
 
+        // Handle rollover investment
         if (this.props.rollOver && this.props.investmentToRoll && this.props.yearOfRollover == year) {
-          pAmount += this.props.investmentToRoll; // Handles rolling investment A into B
+          pAmount += this.props.investmentToRoll;
+          inflationAdjustedAmount += this.props.investmentToRoll;
         }
-        if (inflationAdjusted && this.props.depreciationRate) {
-          pAmount -= this.calculateDepreciation(pAmount, this.props.depreciationRate);
+
+        // Apply inflation to the inflation-adjusted amount
+        if (this.props.depreciationRate) {
+          inflationAdjustedAmount -= this.calculateDepreciation(inflationAdjustedAmount, this.props.depreciationRate);
         }
-        if (true) {
-          this.props.growthMatrix.push({
-            x: addYears(this.today, year),
-            y: Math.floor(pAmount),
-          });
-        }
+
+        // Store both values in the growth matrix
+        this.props.growthMatrix.push({
+          x: addYears(this.today, year),
+          y: Math.floor(showInflation ? inflationAdjustedAmount : pAmount),
+          alternateY: Math.floor(showInflation ? pAmount : inflationAdjustedAmount),
+        });
       }
 
-      return `$${pAmount.toLocaleString()}`;
+      return `$${Math.floor(showInflation ? inflationAdjustedAmount : pAmount).toLocaleString()}`;
     } else {
       return '';
     }
@@ -56,8 +72,8 @@ export class InvestmentCalculator {
     return amount * (percentageOfDepreciation / 100);
   }
 
-  public getInflationAdjusted(amount:number) {
-    return amount - (amount * this.props.depreciationRate)
+  public getInflationAdjusted(amount: number) {
+    return Math.floor(amount - this.calculateDepreciation(amount, this.props.depreciationRate));
   }
 
   public getGrowthMatrix() {
@@ -66,5 +82,9 @@ export class InvestmentCalculator {
 
   public getInvestmentId() {
     return this.props.investmentId;
+  }
+
+  public getPercentageChange(originalAmount: number, newAmount: number) {
+    return Math.floor(((newAmount - originalAmount) / originalAmount) * 100);
   }
 }

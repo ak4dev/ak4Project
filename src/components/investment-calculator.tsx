@@ -13,7 +13,7 @@ import {
   ToggleButton,
 } from '@cloudscape-design/components';
 import { useState } from 'react';
-import { InvestmentCalculatorProps } from '../common/types';
+import { InvestmentCalculatorProps, LineGraphEntry } from '../common/types';
 import { InvestmentCalculator } from '../common/helpers/investment-growth-calculator';
 import DateAmountTable from './date-amount-table';
 import { addYears } from 'date-fns';
@@ -27,9 +27,10 @@ export default function InvestmentCalculatorComponent() {
   const [monthlyWithdrawal, setMonthlyWithdrawal] = useState<number>(0);
   const [yearWithdrawalsBegin, setYearWithdrawalsBegin] = useState<number>(0.9);
   const [yearContributionsStop, setYearContributionsStop] = useState<number | undefined>(yearsOfGrowth);
-  const yoyGrowth: { x: Date; y: number }[] = [];
+  const yoyGrowth: LineGraphEntry[] = [];
   const maxMonthlyWithdrawal = 10000;
   const [yearlyInflation, setYearlyInflation] = useState<number>(2.5);
+  const [showInflation, setShowInflation] = useState<boolean>(false);
 
   const investmentAProps: InvestmentCalculatorProps = {
     currentAmount: currentAmount,
@@ -61,12 +62,12 @@ export default function InvestmentCalculatorComponent() {
   const [monthlyWithdrawalI, setMonthlyWithdrawalI] = useState<number>(0);
   const [yearWithdrawalsBeginI, setYearWithdrawalsBeginI] = useState<number>(0.9);
   const [yearContributionsStopI, setYearContributionsStopI] = useState<number | undefined>(yearsOfGrowthI);
-  const yoyGrowthI: { x: Date; y: number }[] = [];
+  const yoyGrowthI: LineGraphEntry[] = [];
   const maxMonthlyWithdrawalI = 20000;
   const [rollOver, setRollOver] = useState<boolean>(false); // Rolls investment 1 > Investment 2 at end of 'years'
 
   const investmentCalcA = new InvestmentCalculator(investmentAProps);
-  const investmentOneTotal = investmentCalcA.calculateGrowth();
+  const investmentOneTotal = investmentCalcA.calculateGrowth(showInflation);
   const investmentBProps: InvestmentCalculatorProps = {
     currentAmount: currentAmountI,
     setCurrentAmount: setCurrentAmountI,
@@ -93,14 +94,10 @@ export default function InvestmentCalculatorComponent() {
   };
   const investmentCalcB = new InvestmentCalculator(investmentBProps);
   //
-  const investmentTwoTotal = investmentCalcB.calculateGrowth();
-  const investmentBTable = (
-    <DateAmountTable
-      investmentCalc={investmentCalcB}
-    />
-  );
+  const investmentTwoTotal = investmentCalcB.calculateGrowth(showInflation);
+  const investmentBTable = <DateAmountTable investmentCalc={investmentCalcB} />;
   const investmentTwoDisplayText = (
-    <Popover size="medium" position="right" triggerType="custom" content={investmentBTable}>
+    <Popover size="large" position="right" triggerType="custom" content={investmentBTable}>
       <h3>{investmentTwoTotal}</h3>
     </Popover>
   );
@@ -239,13 +236,9 @@ export default function InvestmentCalculatorComponent() {
       }
     />
   );
-  const investmentATable = (
-    <DateAmountTable
-      investmentCalc={investmentCalcA}
-    />
-  );
+  const investmentATable = <DateAmountTable investmentCalc={investmentCalcA} />;
   const investmentOneDisplayText = (
-    <Popover size="medium" position="right" triggerType="custom" content={investmentATable}>
+    <Popover size="large" position="right" triggerType="custom" content={investmentATable}>
       <h3>{investmentOneTotal}</h3>
     </Popover>
   );
@@ -431,16 +424,23 @@ export default function InvestmentCalculatorComponent() {
       <Grid>
         {investmentCalcOne}
         {investmentCalcTwo}
-        {advanced && <FormField description={`Inflation (${yearlyInflation}
-        %)`}>
+        {
+          <FormField
+            description={`Inflation (${yearlyInflation}
+        %)`}
+          >
             <Slider
               onChange={({ detail }) => setYearlyInflation(detail.value)}
               value={yearlyInflation}
               max={5}
-              
+              step={0.5}
               min={0}
             />
-          </FormField>}
+            <ToggleButton pressed={showInflation} onChange={({ detail }) => setShowInflation(detail.pressed)}>
+              Show Inflation
+            </ToggleButton>
+          </FormField>
+        }
       </Grid>
       {lineChart}
       <small>

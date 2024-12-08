@@ -1,6 +1,7 @@
 import { Table } from '@cloudscape-design/components';
 import { DateAmountPair } from '../common/types';
 import { InvestmentCalculator } from '../common/helpers/investment-growth-calculator';
+import { returnGrowthText, returnInflationAdjustedText } from '../common/helpers/date-amount-table-helpers';
 
 export interface DateAmountTableProps {
   investmentCalc: InvestmentCalculator;
@@ -10,7 +11,7 @@ export default function DateAmountTable({ investmentCalc }: DateAmountTableProps
     date: new Date(entry.x),
     amount: entry.y,
     investmentId: investmentCalc.getInvestmentId(),
-    inflationAdjustedAmount: investmentCalc.getInflationAdjusted(entry.y),
+    inflationAdjustedAmount: entry.alternateY,
   }));
   const dateAmountTable = (
     <Table
@@ -25,16 +26,16 @@ export default function DateAmountTable({ investmentCalc }: DateAmountTableProps
           isRowHeader: true,
         },
         {
-          id: 'amount',
-          header: 'Amount',
-          cell: (item: DateAmountPair) => `$${item.amount.toLocaleString()}`,
-          sortingField: 'amount',
+          id: 'graphed-amount',
+          header: 'Graphed Amount',
+          cell: (item: DateAmountPair) => returnGrowthText(item, investmentCalc),
+          sortingField: 'graphed-amount',
         },
         {
-          id: 'inflation-adjusted',
-          header: 'Inflation Adjusted',
-          cell: (item: DateAmountPair) => item.inflationAdjusted && `$${item.inflationAdjusted.toLocaleString()}`,
-          sortingField: 'amount',
+          id: 'alt-amount',
+          header: 'Alt Amount',
+          cell: (item: DateAmountPair) => returnInflationAdjustedText(item, investmentCalc),
+          sortingField: 'alt-amount',
         },
       ]}
     />
