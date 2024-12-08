@@ -1,7 +1,11 @@
 import { Table } from '@cloudscape-design/components';
 import { DateAmountPair } from '../common/types';
 import { InvestmentCalculator } from '../common/helpers/investment-growth-calculator';
-import { returnGrowthText, returnInflationAdjustedText } from '../common/helpers/date-amount-table-helpers';
+import {
+  returnDateElement,
+  returnGrowthText,
+  returnInflationAdjustedText,
+} from '../common/helpers/date-amount-table-helpers';
 
 export interface DateAmountTableProps {
   investmentCalc: InvestmentCalculator;
@@ -21,7 +25,7 @@ export default function DateAmountTable({ investmentCalc }: DateAmountTableProps
         {
           id: 'date',
           header: 'Date',
-          cell: (item: DateAmountPair) => item.date.toLocaleDateString(),
+          cell: (item: DateAmountPair) => returnDateElement(item, investmentCalc),
           sortingField: 'date',
           isRowHeader: true,
         },
