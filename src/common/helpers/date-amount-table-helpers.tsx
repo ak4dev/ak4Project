@@ -39,14 +39,14 @@ export function returnDateElement(dateAmountPair: DateAmountPair, investmentCalc
   // in which case a popover will be returned with the event description
   const year = dateAmountPair.date.getFullYear();
   const yearOfRollover = investmentCalc.props.yearOfRollover;
-  const eventInYear = investmentCalc.getGrowthMatrix().filter((entry) => {
-    console.log(`entry:`, entry);
+  const rolloverDatePair = yearOfRollover &&  investmentCalc.props.growthMatrix[yearOfRollover]
+  const eventInYear = investmentCalc.props.yearOfRollover ? investmentCalc.getGrowthMatrix().filter((entry) => {
     return (
-      yearOfRollover &&
+      yearOfRollover && rolloverDatePair && 
       entry.x.getFullYear() === year &&
-      year === investmentCalc.props.growthMatrix[yearOfRollover].x.getFullYear()
+      year === rolloverDatePair.x.getFullYear()
     );
-  });
+  }) : [];
   if (eventInYear.length > 0) {
     return (
       <Box color="text-status-info">
