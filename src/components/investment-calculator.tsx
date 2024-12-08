@@ -242,7 +242,7 @@ export default function InvestmentCalculatorComponent() {
       <h3>{investmentOneTotal}</h3>
     </Popover>
   );
-  const investmentCalcOne = advanced && (
+  const investmentCalcOne = (
     <Box>
       <FormField description="Principal amount">
         <Input
@@ -320,13 +320,6 @@ export default function InvestmentCalculatorComponent() {
           </ToggleButton>
         </>
       )}
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-
-      {investmentOneDisplayText}
     </Box>
   );
   const investmentCalcTwo = (
@@ -359,16 +352,6 @@ export default function InvestmentCalculatorComponent() {
       </FormField>
       {advanced && (
         <>
-          {/* <FormField description={`Year investment begins (${yearInvestmentBegins})`}>
-            <Slider
-              onChange={({ detail }) => setYearInvestmentBegins(detail.value)}
-              value={yearInvestmentBegins}
-              max={yearsOfGrowth}
-              min={0}
-              tickMarks
-            />
-          </FormField> */}
-
           <FormField description={`Monthly contribution ($${monthlyContributionI})`}>
             <Slider
               onChange={({ detail }) => setMonthlyContributionI(detail.value)}
@@ -409,39 +392,53 @@ export default function InvestmentCalculatorComponent() {
           </FormField>
         </>
       )}
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-      <br></br>
-
-      {investmentTwoDisplayText}
     </Box>
   );
-
+  const finalInvestmentAmountGrid = !advanced ? (
+    <>{investmentOneDisplayText}</>
+  ) : (
+    <Grid gridDefinition={[{ colspan: 2 }, { colspan: 2 }]}>
+      <h3>{investmentOneDisplayText}</h3>
+      <h3>{investmentTwoDisplayText}</h3>
+    </Grid>
+  );
   return (
     <Container header={containerHeader}>
-      <Grid>
-        {investmentCalcOne}
-        {investmentCalcTwo}
-        {
-          <FormField
-            description={`Inflation (${yearlyInflation}
+      <Grid gridDefinition={[{ colspan: 2 }, { colspan: 2 }, { colspan: 2 }]}>
+        <Box>
+          <h3>{investmentCalcOne}</h3>
+        </Box>
+        {advanced && (
+          <Box>
+            <h3>{investmentCalcTwo}</h3>
+          </Box>
+        )}
+        <Box>
+          <h3>
+            <FormField
+              description={`Inflation (${yearlyInflation}
         %)`}
-          >
-            <Slider
-              onChange={({ detail }) => setYearlyInflation(detail.value)}
-              value={yearlyInflation}
-              max={5}
-              step={0.5}
-              min={0}
-            />
-            <ToggleButton pressed={showInflation} onChange={({ detail }) => setShowInflation(detail.pressed)}>
-              Show Inflation
-            </ToggleButton>
-          </FormField>
-        }
+            >
+              <Slider
+                onChange={({ detail }) => setYearlyInflation(detail.value)}
+                value={yearlyInflation}
+                max={5}
+                step={0.5}
+                min={0}
+              />
+              <ToggleButton
+                pressed={showInflation}
+                iconName="view-full"
+                pressedIconName="view-horizontal"
+                onChange={({ detail }) => setShowInflation(detail.pressed)}
+              >
+                Graph Inflation
+              </ToggleButton>
+            </FormField>
+          </h3>
+        </Box>
       </Grid>
+      {finalInvestmentAmountGrid}
       {lineChart}
       <small>
         This is a coding project, <b>NOT A FINANCIAL TOOL</b>, and is intended for educational purposes only;
