@@ -1,10 +1,17 @@
 import { Table } from '@cloudscape-design/components';
 import { DateAmountPair } from '../common/types';
+import { InvestmentCalculator } from '../common/helpers/investment-growth-calculator';
 
 export interface DateAmountTableProps {
-  items: DateAmountPair[];
+  investmentCalc: InvestmentCalculator;
 }
-export default function DateAmountTable({ items }: DateAmountTableProps) {
+export default function DateAmountTable({ investmentCalc }: DateAmountTableProps) {
+  const items: DateAmountPair[] = investmentCalc.getGrowthMatrix().map((entry) => ({
+    date: new Date(entry.x),
+    amount: entry.y,
+    investmentId: investmentCalc.getInvestmentId(),
+    inflationAdjustedAmount: investmentCalc.getInflationAdjusted(entry.y),
+  }));
   const dateAmountTable = (
     <Table
       items={items}
@@ -20,7 +27,13 @@ export default function DateAmountTable({ items }: DateAmountTableProps) {
         {
           id: 'amount',
           header: 'Amount',
-          cell: (item: DateAmountPair) => item.amount,
+          cell: (item: DateAmountPair) => `$${item.amount.toLocaleString()}`,
+          sortingField: 'amount',
+        },
+        {
+          id: 'inflation-adjusted',
+          header: 'Inflation Adjusted',
+          cell: (item: DateAmountPair) => item.inflationAdjusted && `$${item.inflationAdjusted.toLocaleString()}`,
           sortingField: 'amount',
         },
       ]}

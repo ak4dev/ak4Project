@@ -16,6 +16,7 @@ import { useState } from 'react';
 import { InvestmentCalculatorProps } from '../common/types';
 import { InvestmentCalculator } from '../common/helpers/investment-growth-calculator';
 import DateAmountTable from './date-amount-table';
+import { addYears } from 'date-fns';
 
 export default function InvestmentCalculatorComponent() {
   const [advanced, setAdvanced] = useState<boolean>(false);
@@ -28,6 +29,7 @@ export default function InvestmentCalculatorComponent() {
   const [yearContributionsStop, setYearContributionsStop] = useState<number | undefined>(yearsOfGrowth);
   const yoyGrowth: { x: Date; y: number }[] = [];
   const maxMonthlyWithdrawal = 10000;
+  const [yearlyInflation, setYearlyInflation] = useState<number>(2.5);
 
   const investmentAProps: InvestmentCalculatorProps = {
     currentAmount: currentAmount,
@@ -48,6 +50,7 @@ export default function InvestmentCalculatorComponent() {
     advanced: advanced,
     maxMonthlyWithdrawal: maxMonthlyWithdrawal,
     investmentId: 'investmentA',
+    depreciationRate: yearlyInflation,
   };
 
   // Calc 2
@@ -86,17 +89,14 @@ export default function InvestmentCalculatorComponent() {
     rollOver: rollOver,
     yearOfRollover: investmentAProps.yearsOfGrowth,
     investmentId: 'investmentB',
+    depreciationRate: yearlyInflation,
   };
   const investmentCalcB = new InvestmentCalculator(investmentBProps);
   //
   const investmentTwoTotal = investmentCalcB.calculateGrowth();
   const investmentBTable = (
     <DateAmountTable
-      items={investmentBProps.growthMatrix.map((entry) => ({
-        investmentId: investmentBProps.investmentId,
-        date: entry.x,
-        amount: entry.y,
-      }))}
+      investmentCalc={investmentCalcB}
     />
   );
   const investmentTwoDisplayText = (
@@ -173,6 +173,16 @@ export default function InvestmentCalculatorComponent() {
           x: yoyGrowth[yearsOfGrowth - 1].x,
         },
         {
+          title: `[B] Withdrawals begin on Y${investmentBProps.yearWithdrawalsBegin}`,
+          type: 'threshold',
+          x: addYears(new Date(), investmentBProps.yearWithdrawalsBegin),
+        },
+        {
+          title: `[A] Withdrawals begin on Y${investmentAProps.yearWithdrawalsBegin}`,
+          type: 'threshold',
+          x: addYears(new Date(), investmentAProps.yearWithdrawalsBegin),
+        },
+        {
           title: `Investment A = 0 on ${yearInvestmentOneAtZero && yearInvestmentOneAtZero.toDateString()}`,
           type: 'threshold',
           x: yearInvestmentOneAtZero,
@@ -231,11 +241,7 @@ export default function InvestmentCalculatorComponent() {
   );
   const investmentATable = (
     <DateAmountTable
-      items={investmentAProps.growthMatrix.map((entry) => ({
-        investmentId: investmentAProps.investmentId,
-        date: entry.x,
-        amount: entry.y,
-      }))}
+      investmentCalc={investmentCalcA}
     />
   );
   const investmentOneDisplayText = (
@@ -425,6 +431,16 @@ export default function InvestmentCalculatorComponent() {
       <Grid>
         {investmentCalcOne}
         {investmentCalcTwo}
+        {advanced && <FormField description={`Inflation (${yearlyInflation}
+        %)`}>
+            <Slider
+              onChange={({ detail }) => setYearlyInflation(detail.value)}
+              value={yearlyInflation}
+              max={5}
+              
+              min={0}
+            />
+          </FormField>}
       </Grid>
       {lineChart}
       <small>

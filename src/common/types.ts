@@ -25,10 +25,12 @@ export interface InvestmentCalculatorProps {
   investmentToRoll?: number;
   yearOfRollover?: number;
   investmentId: string;
+  depreciationRate: number;
 }
 
 export interface DateAmountPair {
   date: Date;
   amount: number;
+  inflationAdjustedAmount: number;
   investmentId: string;
 }
