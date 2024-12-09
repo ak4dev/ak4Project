@@ -153,7 +153,7 @@ export default function InvestmentCalculatorComponent() {
           title: 'Investment B',
           type: 'line',
           color: parseInt(investmentTwoTotal.replace('$', '')) > 0 ? 'green' : 'red',
-          data: yoyGrowthI,
+          data: advanced ? yoyGrowthI : [],
           valueFormatter: function o(e) {
             return Math.abs(e) >= 1e9
               ? '$' + (e / 1e9).toFixed(1).replace(/\.0$/, '') + 'B'
@@ -167,7 +167,7 @@ export default function InvestmentCalculatorComponent() {
         {
           title: `Rollover on Y${yearsOfGrowth}`,
           type: 'threshold',
-          x: yoyGrowth[yearsOfGrowth - 1].x,
+          x: yoyGrowth[yearsOfGrowth - 1] ? yoyGrowth[yearsOfGrowth - 1].x : new Date(),
         },
         {
           title: `[B] Withdrawals begin on Y${investmentBProps.yearWithdrawalsBegin}`,

@@ -19,6 +19,11 @@ export class InvestmentCalculator {
         // Calculate monthly changes
         for (let month = year == 0 ? thisMonth : 0; month < 12; month++) {
           // Handle withdrawals for both amounts
+          console.log(
+            `withdrawal yearWithdrawalsBegin, year, eval`,
+            this.props.yearWithdrawalsBegin,
+            year >= this.props.yearWithdrawalsBegin,
+          );
           if (this.props.advanced && this.props.monthlyWithdrawal && this.props.yearWithdrawalsBegin) {
             if (this.props.yearWithdrawalsBegin && year >= this.props.yearWithdrawalsBegin) {
               pAmount -= this.props.monthlyWithdrawal;
