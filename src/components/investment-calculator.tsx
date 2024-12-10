@@ -246,6 +246,7 @@ export default function InvestmentCalculatorComponent() {
     <Box>
       <FormField description="Principal amount">
         <Input
+          inputMode="numeric"
           onChange={({ detail }) => {
             detail.value.length > 0 ? setCurrentAmount(detail.value.replace(/[^0-9]/g, '')) : setCurrentAmount('');
           }}
@@ -326,6 +327,7 @@ export default function InvestmentCalculatorComponent() {
     <Box>
       <FormField description="Principal amount">
         <Input
+          inputMode="numeric"
           onChange={({ detail }) => {
             detail.value.length > 0 ? setCurrentAmountI(detail.value.replace(/[^0-9]/g, '')) : setCurrentAmountI('');
           }}
