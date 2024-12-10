@@ -21,8 +21,11 @@ export class InvestmentCalculator {
           // Handle withdrawals for both amounts
           if (this.props.advanced && this.props.monthlyWithdrawal && this.props.yearWithdrawalsBegin) {
             if (this.props.yearWithdrawalsBegin && year >= this.props.yearWithdrawalsBegin) {
-              pAmount -= this.props.monthlyWithdrawal;
-              inflationAdjustedAmount -= this.props.monthlyWithdrawal;
+              let yearWithdrawalsBegin = this.props.yearWithdrawalsBegin;
+              if (yearWithdrawalsBegin !== year || (yearWithdrawalsBegin === year && month >= thisMonth)) {
+                pAmount -= this.props.monthlyWithdrawal;
+                inflationAdjustedAmount -= this.props.monthlyWithdrawal;
+              }
             }
           }
 
@@ -35,11 +38,14 @@ export class InvestmentCalculator {
             (this.props.advanced && !this.props.yearContributionsStop) ||
             !(this.props.yearContributionsStop && year > this.props.yearContributionsStop)
           ) {
-            pAmount += this.props.monthlyContribution * (this.props.projectedGain / 100);
-            pAmount += this.props.monthlyContribution;
+            let yearContributionsBegin = this.props.yearContributionsStop;
+            if (yearContributionsBegin !== year || (yearContributionsBegin === year && month >= thisMonth)) {
+              pAmount += this.props.monthlyContribution * (this.props.projectedGain / 100);
+              pAmount += this.props.monthlyContribution;
 
-            inflationAdjustedAmount += this.props.monthlyContribution * (this.props.projectedGain / 100);
-            inflationAdjustedAmount += this.props.monthlyContribution;
+              inflationAdjustedAmount += this.props.monthlyContribution * (this.props.projectedGain / 100);
+              inflationAdjustedAmount += this.props.monthlyContribution;
+            }
           }
         }
 
