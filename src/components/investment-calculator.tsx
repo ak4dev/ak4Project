@@ -404,7 +404,7 @@ export default function InvestmentCalculatorComponent() {
   );
   return (
     <Container header={containerHeader}>
-      <Grid gridDefinition={[{ colspan: 2 }, { colspan: 2 }, { colspan: 2 }]}>
+      <Grid gridDefinition={[{ colspan: 3 }, { colspan: 3 }, { colspan: 3 }]}>
         <Box>
           <h3>{investmentCalcOne}</h3>
         </Box>
