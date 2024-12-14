@@ -3,75 +3,111 @@ import { InvestmentCalculatorProps } from '../types';
 
 export class InvestmentCalculator {
   props: InvestmentCalculatorProps;
-  today: Date = new Date();
+  private today: Date = new Date();
+  private thisMonth: number = this.today.getMonth();
   static props: InvestmentCalculatorProps;
 
   constructor(investmentCalculatorProps: InvestmentCalculatorProps) {
     this.props = investmentCalculatorProps;
   }
   public calculateGrowth(showInflation: boolean): string {
-    const thisMonth = this.today.getMonth();
-    if (this.props.currentAmount && this.props.projectedGain && this.props.yearsOfGrowth) {
-      let pAmount = parseInt(this.props.currentAmount) || 0;
-      let inflationAdjustedAmount = pAmount;
-
-      for (let year = 0; year < this.props.yearsOfGrowth; year++) {
-        // Calculate monthly changes
-        for (let month = year == 0 ? thisMonth : 0; month < 12; month++) {
-          // Handle withdrawals for both amounts
-          if (this.props.advanced && this.props.monthlyWithdrawal && this.props.yearWithdrawalsBegin) {
-            if (this.props.yearWithdrawalsBegin && year >= this.props.yearWithdrawalsBegin) {
-              let yearWithdrawalsBegin = this.props.yearWithdrawalsBegin;
-              if (yearWithdrawalsBegin !== year || (yearWithdrawalsBegin === year && month >= thisMonth)) {
-                pAmount -= this.props.monthlyWithdrawal;
-                inflationAdjustedAmount -= this.props.monthlyWithdrawal;
-              }
-            }
-          }
-
-          // Apply growth rate
-          pAmount += (pAmount * (this.props.projectedGain / 100)) / 12;
-          inflationAdjustedAmount += (inflationAdjustedAmount * (this.props.projectedGain / 100)) / 12;
-
-          // Handle contributions
-          if (
-            (this.props.advanced && !this.props.yearContributionsStop) ||
-            !(this.props.yearContributionsStop && year > this.props.yearContributionsStop)
-          ) {
-            let yearContributionsBegin = this.props.yearContributionsStop;
-            if (yearContributionsBegin !== year || (yearContributionsBegin === year && month >= thisMonth)) {
-              pAmount += this.props.monthlyContribution * (this.props.projectedGain / 100);
-              pAmount += this.props.monthlyContribution;
-
-              inflationAdjustedAmount += this.props.monthlyContribution * (this.props.projectedGain / 100);
-              inflationAdjustedAmount += this.props.monthlyContribution;
-            }
-          }
-        }
-
-        // Handle rollover investment
-        if (this.props.rollOver && this.props.investmentToRoll && this.props.yearOfRollover == year) {
-          pAmount += this.props.investmentToRoll;
-          inflationAdjustedAmount += this.props.investmentToRoll;
-        }
-
-        // Apply inflation to the inflation-adjusted amount
-        if (this.props.depreciationRate) {
-          inflationAdjustedAmount -= this.calculateDepreciation(inflationAdjustedAmount, this.props.depreciationRate);
-        }
-
-        // Store both values in the growth matrix
-        this.props.growthMatrix.push({
-          x: addYears(this.today, year),
-          y: Math.floor(showInflation ? inflationAdjustedAmount : pAmount),
-          alternateY: Math.floor(showInflation ? pAmount : inflationAdjustedAmount),
-        });
-      }
-
-      return `$${Math.floor(showInflation ? inflationAdjustedAmount : pAmount).toLocaleString()}`;
-    } else {
+    if (!(this.props.currentAmount && this.props.projectedGain && this.props.yearsOfGrowth)) {
       return '';
     }
+
+    let pAmount = parseInt(this.props.currentAmount) || 0;
+    let inflationAdjustedAmount = pAmount;
+    const monthlyGrowthRate = this.props.projectedGain / 100 / 12;
+
+    for (let year = 0; year <= this.props.yearsOfGrowth; year++) {
+      const startMonth = year === 0 ? this.thisMonth : 0;
+      console.log(`YEAR WITHDRAWALS BEGIN:`, this.props.yearWithdrawalsBegin);
+      for (let month = startMonth; month < 12; month++) {
+        // Handle withdrawals
+        if (this.shouldApplyWithdrawal(year, month)) {
+          pAmount -= this.props.monthlyWithdrawal;
+          inflationAdjustedAmount -= this.props.monthlyWithdrawal;
+        }
+
+        // Apply monthly growth
+        pAmount += pAmount * monthlyGrowthRate;
+        inflationAdjustedAmount += inflationAdjustedAmount * monthlyGrowthRate;
+
+        // Handle contributions
+        if (this.shouldApplyContribution(year, month)) {
+          const contribution = this.props.monthlyContribution;
+          const contributionGrowth = contribution * monthlyGrowthRate;
+
+          pAmount += contribution + contributionGrowth;
+          inflationAdjustedAmount += contribution + contributionGrowth;
+        }
+      }
+
+      // Handle one-time rollover investment
+      if (this.shouldApplyRollover(year)) {
+        pAmount += this.props.investmentToRoll || 0;
+        inflationAdjustedAmount += this.props.investmentToRoll || 0;
+      }
+
+      // Apply yearly inflation adjustment
+      if (this.props.depreciationRate) {
+        inflationAdjustedAmount -= this.calculateDepreciation(inflationAdjustedAmount, this.props.depreciationRate);
+      }
+
+      // Store growth data
+      this.props.growthMatrix.push({
+        x: addYears(this.today, year),
+        y: Math.floor(showInflation ? inflationAdjustedAmount : pAmount),
+        alternateY: Math.floor(showInflation ? pAmount : inflationAdjustedAmount),
+      });
+    }
+
+    return `$${Math.floor(showInflation ? inflationAdjustedAmount : pAmount).toLocaleString()}`;
+  }
+
+  private shouldApplyWithdrawal(year: number, month: number): boolean {
+    // Change the check to explicitly check for undefined or null
+    if (
+      !this.props.advanced ||
+      !this.props.monthlyWithdrawal ||
+      this.props.yearWithdrawalsBegin === undefined ||
+      this.props.yearWithdrawalsBegin === null
+    ) {
+      return false;
+    }
+
+    if (year === 0) {
+      // If withdrawals should start in year 0, apply them from thisMonth onwards
+      if (this.props.yearWithdrawalsBegin === 0) {
+        return month >= this.thisMonth;
+      }
+      return false;
+    }
+
+    return year > this.props.yearWithdrawalsBegin || (year === this.props.yearWithdrawalsBegin && month >= 0);
+  }
+
+  private shouldApplyContribution(year: number, month: number): boolean {
+    if (!this.props.advanced || !this.props.yearContributionsStop) {
+      return true;
+    }
+
+    if (year === 0) {
+      return month >= this.thisMonth;
+    }
+
+    return (
+      year < this.props.yearContributionsStop || (year === this.props.yearContributionsStop && month < this.thisMonth)
+    );
+  }
+
+  private shouldApplyRollover(year: number): boolean {
+    return (
+      Boolean(this.props.rollOver) &&
+      Boolean(this.props.investmentToRoll) &&
+      this.props.yearOfRollover != null &&
+      Number(this.props.yearOfRollover) === year
+    );
   }
 
   private calculateDepreciation(amount: number, percentageOfDepreciation: number) {

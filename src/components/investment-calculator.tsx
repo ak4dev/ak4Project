@@ -25,7 +25,7 @@ export default function InvestmentCalculatorComponent() {
   const [yearsOfGrowth, setYearsOfGrowth] = useState<number>(30);
   const [monthlyContribution, setMonthlyContribution] = useState<number>(0);
   const [monthlyWithdrawal, setMonthlyWithdrawal] = useState<number>(0);
-  const [yearWithdrawalsBegin, setYearWithdrawalsBegin] = useState<number>(0.9);
+  const [yearWithdrawalsBegin, setYearWithdrawalsBegin] = useState<number>();
   const [yearContributionsStop, setYearContributionsStop] = useState<number | undefined>(yearsOfGrowth);
   const yoyGrowth: LineGraphEntry[] = [];
   const maxMonthlyWithdrawal = 10000;
@@ -60,7 +60,7 @@ export default function InvestmentCalculatorComponent() {
   const [yearsOfGrowthI, setYearsOfGrowthI] = useState<number>(30);
   const [monthlyContributionI, setMonthlyContributionI] = useState<number>(0);
   const [monthlyWithdrawalI, setMonthlyWithdrawalI] = useState<number>(0);
-  const [yearWithdrawalsBeginI, setYearWithdrawalsBeginI] = useState<number>(0.9);
+  const [yearWithdrawalsBeginI, setYearWithdrawalsBeginI] = useState<number>();
   const [yearContributionsStopI, setYearContributionsStopI] = useState<number | undefined>(yearsOfGrowthI);
   const yoyGrowthI: LineGraphEntry[] = [];
   const maxMonthlyWithdrawalI = 20000;
@@ -291,12 +291,10 @@ export default function InvestmentCalculatorComponent() {
               tickMarks
             />
           </FormField>
-          <FormField
-            description={`Year withdrawals begin ${yearWithdrawalsBegin !== 0.9 ? `(${yearWithdrawalsBegin})` : ''}`}
-          >
+          <FormField description={`Year withdrawals begin ${yearWithdrawalsBegin ? `(${yearWithdrawalsBegin})` : ''}`}>
             <Slider
               onChange={({ detail }) => setYearWithdrawalsBegin(detail.value)}
-              value={yearWithdrawalsBegin === 0.9 ? yearsOfGrowth : yearWithdrawalsBegin}
+              value={yearWithdrawalsBegin}
               max={yearsOfGrowth}
               min={0}
               tickMarks
@@ -373,11 +371,11 @@ export default function InvestmentCalculatorComponent() {
             />
           </FormField>
           <FormField
-            description={`Year withdrawals begin ${yearWithdrawalsBeginI !== 0.9 ? `(${yearWithdrawalsBeginI})` : ''}`}
+            description={`Year withdrawals begin ${yearWithdrawalsBeginI ? `(${yearWithdrawalsBeginI})` : ''}`}
           >
             <Slider
               onChange={({ detail }) => setYearWithdrawalsBeginI(detail.value)}
-              value={yearWithdrawalsBeginI === 0.9 ? yearsOfGrowthI : yearWithdrawalsBeginI}
+              value={yearWithdrawalsBeginI ? yearsOfGrowthI : yearWithdrawalsBeginI}
               max={yearsOfGrowthI}
               min={0}
               tickMarks
