@@ -43,7 +43,7 @@ export default function InvestmentCalculatorComponent() {
     setMonthlyContribution: setMonthlyContribution,
     monthlyWithdrawal: monthlyWithdrawal,
     setMonthlyWithdrawal: setMonthlyWithdrawal,
-    yearWithdrawalsBegin: yearWithdrawalsBegin,
+    yearWithdrawalsBegin: yearWithdrawalsBegin ?? 0,
     setYearWithdrawalsBegin: setYearWithdrawalsBegin,
     yearContributionsStop: yearContributionsStop,
     setYearContributionsStop: setYearContributionsStop,
@@ -60,7 +60,7 @@ export default function InvestmentCalculatorComponent() {
   const [yearsOfGrowthI, setYearsOfGrowthI] = useState<number>(30);
   const [monthlyContributionI, setMonthlyContributionI] = useState<number>(0);
   const [monthlyWithdrawalI, setMonthlyWithdrawalI] = useState<number>(0);
-  const [yearWithdrawalsBeginI, setYearWithdrawalsBeginI] = useState<number>();
+  const [yearWithdrawalsBeginI, setYearWithdrawalsBeginI] = useState<number>(0);
   const [yearContributionsStopI, setYearContributionsStopI] = useState<number | undefined>(yearsOfGrowthI);
   const yoyGrowthI: LineGraphEntry[] = [];
   const maxMonthlyWithdrawalI = 20000;

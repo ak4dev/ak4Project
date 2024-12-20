@@ -2,8 +2,6 @@ import { APP_NAME } from '../../common/constants';
 import { BreadcrumbGroup, ContentLayout, SpaceBetween } from '@cloudscape-design/components';
 import { useOnFollow } from '../../common/hooks/use-on-follow';
 import BaseAppLayout from '../../components/base-app-layout';
-// import DashboardHeader from "./dashboard-header";
-// import BlogContainer from "./blog-container";
 import InvestmentCalculator from '../../components/investment-calculator';
 
 export default function DashboardPage() {
