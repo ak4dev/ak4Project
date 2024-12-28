@@ -6,6 +6,10 @@ import { APP_NAME } from '../common/constants';
 import { useLocation } from 'react-router-dom';
 
 export default function NavigationPanel() {
+  /*
+  Side navigation panel component.
+  Handles the navigation panel state and updates the navigation panel items based on the current route
+  */
   const location = useLocation();
   const onFollow = useOnFollow();
   const [navigationPanelState, setNavigationPanelState] = useNavigationPanelState();

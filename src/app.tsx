@@ -10,12 +10,10 @@ import InvestmentCalculatorLayout from './pages/investment-calculator/investment
 
 export default function App() {
   const Router = USE_BROWSER_ROUTER ? BrowserRouter : HashRouter;
-  StorageHelper.applyTheme(Mode.Dark);
+  StorageHelper.applyTheme(Mode.Dark); // Always set to dark mode
   return (
     <div style={{ height: '100%' }}>
       <Router>
-        {/* <GlobalHeader /> */}
-        {/* <div style={{ height: "56px", backgroundColor: "#000716" }}>&nbsp;</div> */}
         <div>
           <Routes>
             <Route index path="/" element={<DashboardPage />} />

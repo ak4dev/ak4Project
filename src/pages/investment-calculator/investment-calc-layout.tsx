@@ -5,6 +5,9 @@ import BaseAppLayout from '../../components/base-app-layout';
 import InvestmentCalculator from '../../components/investment-calculator';
 
 export default function InvestmentCalculatorLayout() {
+  /*
+  Layout for the investment calculator page
+  */
   const onFollow = useOnFollow();
 
   return (

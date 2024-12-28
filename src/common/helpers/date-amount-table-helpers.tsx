@@ -3,6 +3,10 @@ import { InvestmentCalculator } from './investment-growth-calculator';
 import { Box, Popover } from '@cloudscape-design/components';
 
 export function returnInflationAdjustedText(dateAmountPair: DateAmountPair, investmentCalc: InvestmentCalculator) {
+  /*
+  Retrieves the percentage change between the first year of the growth matrix and the inflation adjusted amount,
+  used in table which displays the amount and the percentage change
+  */
   const percentChange = investmentCalc.getPercentageChange(
     investmentCalc.getGrowthMatrix()[0].y,
     dateAmountPair.inflationAdjustedAmount,
@@ -21,6 +25,10 @@ export function returnInflationAdjustedText(dateAmountPair: DateAmountPair, inve
 }
 
 export function returnGrowthText(dateAmountPair: DateAmountPair, investmentCalc: InvestmentCalculator) {
+  /*
+  Retrieves the percentage change between the first year of the growth matrix and the amount,
+  used in table which displays the amount and the percentage change
+  */
   const percentChange = investmentCalc.getPercentageChange(
     investmentCalc.getGrowthMatrix()[0].y,
     dateAmountPair.amount,
@@ -35,8 +43,9 @@ export function returnGrowthText(dateAmountPair: DateAmountPair, investmentCalc:
 }
 
 export function returnDateElement(dateAmountPair: DateAmountPair, investmentCalc: InvestmentCalculator) {
-  // Returns plainly formatted text formatted with shortMonth 4-digit-year unless an event occured in the year
-  // in which case a popover will be returned with the event description
+  /*
+  Returns a popover which displays the year of rollover and the amount of the rollover if the year of rollover is the same as the year of the dateAmountPair
+  */ 
   const year = dateAmountPair.date.getFullYear();
   const yearOfRollover = investmentCalc.props.yearOfRollover;
   const rolloverDatePair = yearOfRollover && investmentCalc.props.growthMatrix[yearOfRollover];

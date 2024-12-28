@@ -5,6 +5,9 @@ import BaseAppLayout from '../../components/base-app-layout';
 import InvestmentCalculator from '../../components/investment-calculator';
 
 export default function DashboardPage() {
+  /*
+  Landing page for the application
+  */
   const onFollow = useOnFollow();
 
   return (

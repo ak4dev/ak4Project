@@ -6,6 +6,10 @@ const THEME_STORAGE_NAME = `${PREFIX}-theme`;
 const NAVIGATION_PANEL_STATE_STORAGE_NAME = `${PREFIX}-navigation-panel-state`;
 
 export abstract class StorageHelper {
+  /*
+  Used to determine whether the user has a set theme preference; not currently utilized as the
+  theme is set to dark without an option for the user to modify
+  */
   static getTheme() {
     const value = localStorage.getItem(THEME_STORAGE_NAME) ?? Mode.Light;
     const theme = value === Mode.Dark ? Mode.Dark : Mode.Light;

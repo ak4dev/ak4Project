@@ -19,6 +19,7 @@ import DateAmountTable from './date-amount-table';
 import { addYears } from 'date-fns';
 
 export default function InvestmentCalculatorComponent() {
+  // State variables used in Calc 1
   const [advanced, setAdvanced] = useState<boolean>(false);
   const [currentAmount, setCurrentAmount] = useState<string | undefined>('10000');
   const [projectedGain, setProjectedGain] = useState<number>(10);
@@ -33,6 +34,7 @@ export default function InvestmentCalculatorComponent() {
   const [showInflation, setShowInflation] = useState<boolean>(false);
 
   const investmentAProps: InvestmentCalculatorProps = {
+    // Props for Calc 1
     currentAmount: currentAmount,
     setCurrentAmount: setCurrentAmount,
     projectedGain: projectedGain,
@@ -54,7 +56,7 @@ export default function InvestmentCalculatorComponent() {
     depreciationRate: yearlyInflation,
   };
 
-  // Calc 2
+  // State variables used in Calc 2
   const [currentAmountI, setCurrentAmountI] = useState<string | undefined>('10000');
   const [projectedGainI, setProjectedGainI] = useState<number>(10);
   const [yearsOfGrowthI, setYearsOfGrowthI] = useState<number>(30);
@@ -64,11 +66,14 @@ export default function InvestmentCalculatorComponent() {
   const [yearContributionsStopI, setYearContributionsStopI] = useState<number | undefined>(yearsOfGrowthI);
   const yoyGrowthI: LineGraphEntry[] = [];
   const maxMonthlyWithdrawalI = 20000;
-  const [rollOver, setRollOver] = useState<boolean>(false); // Rolls investment 1 > Investment 2 at end of 'years'
+  const [rollOver, setRollOver] = useState<boolean>(false); // Rolls investment 1 -> Investment 2 at end of 'years'
 
-  const investmentCalcA = new InvestmentCalculator(investmentAProps);
-  const investmentOneTotal = investmentCalcA.calculateGrowth(showInflation);
+  const investmentCalcA = new InvestmentCalculator(investmentAProps); // Calc 1; used to graph investment A on line graph
+  const investmentOneTotal = investmentCalcA.calculateGrowth(showInflation); // Used to display total amount of investment A below form / sliders
+
+
   const investmentBProps: InvestmentCalculatorProps = {
+    // Props for Calc 2; Investment B on  line graph
     currentAmount: currentAmountI,
     setCurrentAmount: setCurrentAmountI,
     projectedGain: projectedGainI,
@@ -92,9 +97,8 @@ export default function InvestmentCalculatorComponent() {
     investmentId: 'investmentB',
     depreciationRate: yearlyInflation,
   };
-  const investmentCalcB = new InvestmentCalculator(investmentBProps);
-  //
-  const investmentTwoTotal = investmentCalcB.calculateGrowth(showInflation);
+  const investmentCalcB = new InvestmentCalculator(investmentBProps); // Calc 2; used to graph investment B on line graph
+  const investmentTwoTotal = investmentCalcB.calculateGrowth(showInflation); // Used to display total amount of investment B below form / sliders
   const investmentBTable = <DateAmountTable investmentCalc={investmentCalcB} />;
   const investmentTwoDisplayText = (
     <Popover size="large" position="right" triggerType="custom" content={investmentBTable}>
@@ -102,6 +106,9 @@ export default function InvestmentCalculatorComponent() {
     </Popover>
   );
   const yearInvestmentOneAtZero =
+  /*
+  Used to determine whether investment A has reached 0 for the purpose of adjusting what the user sees
+  */
     yoyGrowth.filter((yearXy) => {
       return yearXy.y <= 0;
     }) &&
@@ -121,7 +128,7 @@ export default function InvestmentCalculatorComponent() {
     yoyGrowthI.filter((yearXy) => {
       return yearXy.y <= 0;
     })[0].x;
-  const containerHeader = (
+  const containerHeader = ( // Header of primary Investment Calculator container
     <Grid>
       <Header>
         Investment Calculator
@@ -131,7 +138,7 @@ export default function InvestmentCalculatorComponent() {
       </Header>
     </Grid>
   );
-  const lineChart = (
+  const lineChart = ( // Line graph used to display both investments
     <LineChart
       series={[
         {
@@ -236,13 +243,13 @@ export default function InvestmentCalculatorComponent() {
       }
     />
   );
-  const investmentATable = <DateAmountTable investmentCalc={investmentCalcA} />;
+  const investmentATable = <DateAmountTable investmentCalc={investmentCalcA} />; // Table used in popover below Investment A form / sliders
   const investmentOneDisplayText = (
     <Popover size="large" position="right" triggerType="custom" content={investmentATable}>
       <h3>{investmentOneTotal}</h3>
     </Popover>
   );
-  const investmentCalcOne = (
+  const investmentCalcOne = ( // Sliders which control the props of Investment A
     <Box>
       <FormField description="Principal amount">
         <Input
@@ -321,7 +328,7 @@ export default function InvestmentCalculatorComponent() {
       )}
     </Box>
   );
-  const investmentCalcTwo = (
+  const investmentCalcTwo = ( // Sliders which control Investment B
     <Box>
       <FormField description="Principal amount">
         <Input
@@ -350,7 +357,7 @@ export default function InvestmentCalculatorComponent() {
           tickMarks
         />
       </FormField>
-      {advanced && (
+      {advanced && ( // Only display both investments and pertinent controls when advanced is enabled
         <>
           <FormField description={`Monthly contribution ($${monthlyContributionI})`}>
             <Slider
@@ -394,7 +401,7 @@ export default function InvestmentCalculatorComponent() {
       )}
     </Box>
   );
-  const finalInvestmentAmountGrid = !advanced ? (
+  const finalInvestmentAmountGrid = !advanced ? ( // Properly formats both investment amount calculations for display below form / sliders
     <>{investmentOneDisplayText}</>
   ) : (
     <Grid gridDefinition={[{ colspan: 2 }, { colspan: 2 }]}>

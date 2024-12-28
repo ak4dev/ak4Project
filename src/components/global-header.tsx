@@ -8,6 +8,11 @@ export default function GlobalHeader() {
   const [theme, setTheme] = useState<Mode>(StorageHelper.applyTheme(Mode.Dark));
 
   const onChangeThemeClick = () => {
+    /*
+    Handle the theme change click event.
+    Toggles between light and dark mode, and updates the theme state accordingly.
+    Not currently utilized as the theme is always set to dark mode.
+    */
     if (theme === Mode.Dark) {
       setTheme(StorageHelper.applyTheme(Mode.Light));
     } else {

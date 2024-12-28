@@ -11,6 +11,9 @@ export class InvestmentCalculator {
     this.props = investmentCalculatorProps;
   }
   public calculateGrowth(showInflation: boolean): string {
+    /*
+    Calculates the value of principal amount based on form selections
+    */
     if (!(this.props.currentAmount && this.props.projectedGain && this.props.yearsOfGrowth)) {
       return '';
     }
@@ -43,7 +46,7 @@ export class InvestmentCalculator {
         }
       }
 
-      // Handle one-time rollover investment
+      // Handle one-time rollover investment if applicable
       if (this.shouldApplyRollover(year)) {
         pAmount += this.props.investmentToRoll || 0;
         inflationAdjustedAmount += this.props.investmentToRoll || 0;
@@ -54,7 +57,7 @@ export class InvestmentCalculator {
         inflationAdjustedAmount -= this.calculateDepreciation(inflationAdjustedAmount, this.props.depreciationRate);
       }
 
-      // Store growth data
+      // Store growth data in array which is used to populate the line graph
       this.props.growthMatrix.push({
         x: addYears(this.today, year),
         y: Math.floor(showInflation ? inflationAdjustedAmount : pAmount),
@@ -66,7 +69,8 @@ export class InvestmentCalculator {
   }
 
   private shouldApplyWithdrawal(year: number, month: number): boolean {
-    // Change the check to explicitly check for undefined or null
+    /* Determine whether withdrawal should be calculated based on what's been 
+     selected in the form*/
     if (
       !this.props.advanced ||
       !this.props.monthlyWithdrawal ||
@@ -88,6 +92,9 @@ export class InvestmentCalculator {
   }
 
   private shouldApplyContribution(year: number, month: number): boolean {
+    /*
+    Determines whether contribution should be calculated based on what's been selected in the form
+    */
     if (!this.props.advanced || !this.props.yearContributionsStop) {
       return true;
     }
@@ -111,18 +118,30 @@ export class InvestmentCalculator {
   }
 
   private calculateDepreciation(amount: number, percentageOfDepreciation: number) {
+    /* 
+    Calculates the amount of depreciation based on the percentage of depreciation and the amount of principal
+    */
     return amount * (percentageOfDepreciation / 100);
   }
 
   public getInflationAdjusted(amount: number) {
+    /*
+    Returns the amount of principal after depreciation has been applied
+    */
     return Math.floor(amount - this.calculateDepreciation(amount, this.props.depreciationRate));
   }
 
   public getGrowthMatrix() {
+    /*
+    Returns the array of growth data
+    */
     return this.props.growthMatrix;
   }
 
   public getInvestmentId() {
+    /*
+    Returns the investment ID
+    */
     return this.props.investmentId;
   }
 
