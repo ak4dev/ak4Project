@@ -45,7 +45,7 @@ export function returnGrowthText(dateAmountPair: DateAmountPair, investmentCalc:
 export function returnDateElement(dateAmountPair: DateAmountPair, investmentCalc: InvestmentCalculator) {
   /*
   Returns a popover which displays the year of rollover and the amount of the rollover if the year of rollover is the same as the year of the dateAmountPair
-  */ 
+  */
   const year = dateAmountPair.date.getFullYear();
   const yearOfRollover = investmentCalc.props.yearOfRollover;
   const rolloverDatePair = yearOfRollover && investmentCalc.props.growthMatrix[yearOfRollover];
