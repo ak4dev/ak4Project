@@ -23,14 +23,14 @@ import DateAmountTable from './date-amount-table';
 
 /**
  * Investment Calculator Component
- * 
+ *
  * A comprehensive investment calculator that supports:
  * - Basic investment growth calculations
  * - Advanced features including contributions, withdrawals, and rollovers
  * - Dual investment comparison
  * - Inflation adjustment calculations
  * - Interactive charting and data visualization
- * 
+ *
  * The component manages two separate investment calculations (A and B) and provides
  * a rich interface for comparing different investment scenarios.
  */
@@ -55,7 +55,7 @@ export default function InvestmentCalculatorComponent() {
   // ============================================================================
   // State Management - Investment A (Primary)
   // ============================================================================
-  
+
   const [advanced, setAdvanced] = useState<boolean>(false);
   const [currentAmount, setCurrentAmount] = useState<string | undefined>(DEFAULT_INITIAL_AMOUNT);
   const [projectedGain, setProjectedGain] = useState<number>(DEFAULT_PROJECTED_GAIN);
@@ -68,7 +68,7 @@ export default function InvestmentCalculatorComponent() {
   // ============================================================================
   // State Management - Investment B (Comparison)
   // ============================================================================
-  
+
   const [currentAmountB, setCurrentAmountB] = useState<string | undefined>(DEFAULT_INITIAL_AMOUNT);
   const [projectedGainB, setProjectedGainB] = useState<number>(DEFAULT_PROJECTED_GAIN);
   const [yearsOfGrowthB, setYearsOfGrowthB] = useState<number>(DEFAULT_YEARS_OF_GROWTH);
@@ -80,7 +80,7 @@ export default function InvestmentCalculatorComponent() {
   // ============================================================================
   // State Management - Global Settings
   // ============================================================================
-  
+
   const [yearlyInflation, setYearlyInflation] = useState<number>(DEFAULT_INFLATION_RATE);
   const [showInflation, setShowInflation] = useState<boolean>(false);
   const [rollOver, setRollOver] = useState<boolean>(false);
@@ -148,7 +148,7 @@ export default function InvestmentCalculatorComponent() {
 
   const investmentCalcA = new InvestmentCalculator(investmentAProps);
   const investmentCalcB = new InvestmentCalculator(investmentBProps);
-  
+
   const investmentATotal = investmentCalcA.calculateGrowth(showInflation);
   const investmentBTotal = investmentCalcB.calculateGrowth(showInflation);
 
@@ -196,7 +196,7 @@ export default function InvestmentCalculatorComponent() {
    * Determines when investments reach zero for threshold display
    */
   const getZeroDate = (matrix: LineGraphEntry[]): Date | undefined => {
-    const zeroPoint = matrix.find(point => point.y <= 0);
+    const zeroPoint = matrix.find((point) => point.y <= 0);
     return zeroPoint?.x;
   };
 
@@ -213,10 +213,7 @@ export default function InvestmentCalculatorComponent() {
   const renderHeader = () => (
     <Header>
       Investment Calculator
-      <Toggle 
-        onChange={({ detail }) => setAdvanced(detail.checked)} 
-        checked={advanced}
-      >
+      <Toggle onChange={({ detail }) => setAdvanced(detail.checked)} checked={advanced}>
         Advanced
       </Toggle>
     </Header>
@@ -234,7 +231,7 @@ export default function InvestmentCalculatorComponent() {
           value={formatCurrencyInput(currentAmount)}
         />
       </FormField>
-      
+
       <FormField description={`Estimated return (${projectedGain}%)`}>
         <Slider
           onChange={({ detail }) => setProjectedGain(detail.value)}
@@ -244,7 +241,7 @@ export default function InvestmentCalculatorComponent() {
           tickMarks
         />
       </FormField>
-      
+
       <FormField description={`Years (${yearsOfGrowth})`}>
         <Slider
           onChange={({ detail }) => setYearsOfGrowth(detail.value)}
@@ -266,7 +263,7 @@ export default function InvestmentCalculatorComponent() {
               tickMarks
             />
           </FormField>
-          
+
           <FormField description={`Year contributions stop (${yearContributionsStop})`}>
             <Slider
               onChange={({ detail }) => setYearContributionsStop(detail.value)}
@@ -276,7 +273,7 @@ export default function InvestmentCalculatorComponent() {
               tickMarks
             />
           </FormField>
-          
+
           <FormField description={`Year withdrawals begin ${yearWithdrawalsBegin ? `(${yearWithdrawalsBegin})` : ''}`}>
             <Slider
               onChange={({ detail }) => setYearWithdrawalsBegin(detail.value)}
@@ -286,7 +283,7 @@ export default function InvestmentCalculatorComponent() {
               tickMarks
             />
           </FormField>
-          
+
           <FormField description={`Monthly withdrawal ($${monthlyWithdrawal})`}>
             <Slider
               onChange={({ detail }) => setMonthlyWithdrawal(detail.value)}
@@ -296,7 +293,7 @@ export default function InvestmentCalculatorComponent() {
               tickMarks
             />
           </FormField>
-          
+
           <ToggleButton
             onChange={({ detail }) => setRollOver(detail.pressed)}
             pressed={rollOver}
@@ -322,7 +319,7 @@ export default function InvestmentCalculatorComponent() {
           value={formatCurrencyInput(currentAmountB)}
         />
       </FormField>
-      
+
       <FormField description={`Estimated return (${projectedGainB}%)`}>
         <Slider
           onChange={({ detail }) => setProjectedGainB(detail.value)}
@@ -332,7 +329,7 @@ export default function InvestmentCalculatorComponent() {
           tickMarks
         />
       </FormField>
-      
+
       <FormField description={`Years (${yearsOfGrowthB})`}>
         <Slider
           onChange={({ detail }) => setYearsOfGrowthB(detail.value)}
@@ -352,7 +349,7 @@ export default function InvestmentCalculatorComponent() {
           tickMarks
         />
       </FormField>
-      
+
       <FormField description={`Year contributions stop (${yearContributionsStopB})`}>
         <Slider
           onChange={({ detail }) => setYearContributionsStopB(detail.value)}
@@ -362,7 +359,7 @@ export default function InvestmentCalculatorComponent() {
           tickMarks
         />
       </FormField>
-      
+
       <FormField description={`Year withdrawals begin ${yearWithdrawalsBeginB ? `(${yearWithdrawalsBeginB})` : ''}`}>
         <Slider
           onChange={({ detail }) => setYearWithdrawalsBeginB(detail.value)}
@@ -372,7 +369,7 @@ export default function InvestmentCalculatorComponent() {
           tickMarks
         />
       </FormField>
-      
+
       <FormField description={`Monthly withdrawal ($${monthlyWithdrawalB})`}>
         <Slider
           onChange={({ detail }) => setMonthlyWithdrawalB(detail.value)}
@@ -392,43 +389,35 @@ export default function InvestmentCalculatorComponent() {
     const informationItems = [
       {
         name: '(A) Withdrawal Start',
-        value: yearWithdrawalsBegin 
+        value: yearWithdrawalsBegin
           ? addYears(new Date(), yearWithdrawalsBegin).toDateString()
-          : monthlyWithdrawal > 0 
-            ? new Date().toDateString() 
+          : monthlyWithdrawal > 0
+            ? new Date().toDateString()
             : 'N/A',
       },
       {
         name: '(B) Withdrawal Start',
-        value: yearWithdrawalsBeginB 
+        value: yearWithdrawalsBeginB
           ? addYears(new Date(), yearWithdrawalsBeginB).toDateString()
-          : monthlyWithdrawalB > 0 
-            ? new Date().toDateString() 
+          : monthlyWithdrawalB > 0
+            ? new Date().toDateString()
             : 'N/A',
       },
       {
         name: '(A) Contributions End',
-        value: yearContributionsStop 
-          ? addYears(new Date(), yearContributionsStop).toDateString() 
-          : 'N/A',
+        value: yearContributionsStop ? addYears(new Date(), yearContributionsStop).toDateString() : 'N/A',
       },
       {
         name: '(B) Contributions End',
-        value: yearContributionsStopB 
-          ? addYears(new Date(), yearContributionsStopB).toDateString() 
-          : 'N/A',
+        value: yearContributionsStopB ? addYears(new Date(), yearContributionsStopB).toDateString() : 'N/A',
       },
       {
         name: 'Rollover Date',
-        value: rollOver && yearsOfGrowth 
-          ? addYears(new Date(), yearsOfGrowth).toDateString() 
-          : 'N/A',
+        value: rollOver && yearsOfGrowth ? addYears(new Date(), yearsOfGrowth).toDateString() : 'N/A',
       },
       {
         name: 'Rollover Amount',
-        value: investmentBProps.investmentToRoll 
-          ? `$${investmentBProps.investmentToRoll.toLocaleString()}` 
-          : 'N/A',
+        value: investmentBProps.investmentToRoll ? `$${investmentBProps.investmentToRoll.toLocaleString()}` : 'N/A',
       },
       {
         name: 'Inflation Rate',
@@ -544,24 +533,34 @@ export default function InvestmentCalculatorComponent() {
           type: 'threshold',
           x: addYears(new Date(), yearWithdrawalsBegin),
         },
-        ...(investmentAZeroDate ? [{
-          title: `Investment A = 0 on ${investmentAZeroDate.toDateString()}`,
-          type: 'threshold' as const,
-          x: investmentAZeroDate,
-        }] : []),
-        ...(investmentBZeroDate ? [{
-          title: `Investment B = 0 on ${investmentBZeroDate.toDateString()}`,
-          type: 'threshold' as const,
-          x: investmentBZeroDate,
-        }] : []),
+        ...(investmentAZeroDate
+          ? [
+              {
+                title: `Investment A = 0 on ${investmentAZeroDate.toDateString()}`,
+                type: 'threshold' as const,
+                x: investmentAZeroDate,
+              },
+            ]
+          : []),
+        ...(investmentBZeroDate
+          ? [
+              {
+                title: `Investment B = 0 on ${investmentBZeroDate.toDateString()}`,
+                type: 'threshold' as const,
+                x: investmentBZeroDate,
+              },
+            ]
+          : []),
       ]}
       yScaleType="linear"
       i18nStrings={{
         xTickFormatter: (date) =>
-          date.toLocaleDateString('en-US', {
-            month: 'short',
-            year: 'numeric',
-          }).replace(',', '\n'),
+          date
+            .toLocaleDateString('en-US', {
+              month: 'short',
+              year: 'numeric',
+            })
+            .replace(',', '\n'),
         yTickFormatter: formatChartValue,
       }}
       ariaLabel="Investment growth comparison chart"
@@ -596,9 +595,9 @@ export default function InvestmentCalculatorComponent() {
    */
   const renderDisclaimer = () => (
     <small>
-      This is a coding project, <b>NOT A FINANCIAL TOOL</b>, and is intended for educational purposes only;
-      calculations are merely approximations and no guarantee should be assumed. <b>USE AT YOUR OWN RISK.</b>{' '}
-      Information on this site does not constitute investment or financial advice.
+      This is a coding project, <b>NOT A FINANCIAL TOOL</b>, and is intended for educational purposes only; calculations
+      are merely approximations and no guarantee should be assumed. <b>USE AT YOUR OWN RISK.</b> Information on this
+      site does not constitute investment or financial advice.
     </small>
   );
 
@@ -609,19 +608,13 @@ export default function InvestmentCalculatorComponent() {
   return (
     <Container header={renderHeader()}>
       <Grid gridDefinition={[{ colspan: 3 }, { colspan: 3 }, { colspan: 3 }]}>
-        <Box>
-          {renderInvestmentAControls()}
-        </Box>
-        
-        {advanced && (
-          <Box>
-            {renderInvestmentBControls()}
-          </Box>
-        )}
-        
+        <Box>{renderInvestmentAControls()}</Box>
+
+        {advanced && <Box>{renderInvestmentBControls()}</Box>}
+
         {renderInflationPanel()}
       </Grid>
-      
+
       {renderInvestmentTotals()}
       {renderLineChart()}
       {renderDisclaimer()}

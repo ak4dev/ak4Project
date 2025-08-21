@@ -7,11 +7,11 @@ import InvestmentCalculator from '../../components/investment-calculator';
 
 /**
  * Dashboard Page Component
- * 
+ *
  * The main landing page of the application featuring the investment calculator.
  * Provides a clean, focused interface for users to perform investment calculations
  * and visualize their investment growth over time.
- * 
+ *
  * Features:
  * - Investment calculator with basic and advanced modes
  * - Interactive charts and data visualization
@@ -32,12 +32,7 @@ export default function DashboardPage() {
 
   return (
     <BaseAppLayout
-      breadcrumbs={
-        <BreadcrumbGroup
-          onFollow={onFollow}
-          items={breadcrumbItems}
-        />
-      }
+      breadcrumbs={<BreadcrumbGroup onFollow={onFollow} items={breadcrumbItems} />}
       content={
         <ContentLayout>
           <SpaceBetween size="l">

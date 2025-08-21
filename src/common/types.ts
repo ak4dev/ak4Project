@@ -1,6 +1,6 @@
 /**
  * Type Definitions
- * 
+ *
  * Contains all TypeScript interfaces and types used throughout the application.
  * Organized by feature area for better maintainability.
  */
@@ -32,11 +32,11 @@ export interface InvestmentCalculatorProps {
   /** Initial investment amount as string for input handling */
   currentAmount: string | undefined;
   setCurrentAmount: (value: string | undefined) => void;
-  
+
   /** Expected annual return percentage */
   projectedGain: number;
   setProjectedGain: (value: number) => void;
-  
+
   /** Total years to calculate growth */
   yearsOfGrowth: number;
   setYearsOfGrowth: (value: number) => void;
@@ -45,15 +45,15 @@ export interface InvestmentCalculatorProps {
   /** Year when withdrawals should begin */
   yearWithdrawalsBegin: number;
   setYearWithdrawalsBegin: (value: number) => void;
-  
+
   /** Monthly withdrawal amount */
   monthlyWithdrawal: number;
   setMonthlyWithdrawal: (value: number) => void;
-  
+
   /** Monthly contribution amount */
   monthlyContribution: number;
   setMonthlyContribution: (value: number) => void;
-  
+
   /** Year when contributions should stop */
   yearContributionsStop: number | undefined;
   setYearContributionsStop: (value: number | undefined) => void;
@@ -61,23 +61,23 @@ export interface InvestmentCalculatorProps {
   // Configuration & Limits
   /** Maximum allowed monthly withdrawal */
   maxMonthlyWithdrawal: number;
-  
+
   /** Annual inflation/depreciation rate */
   depreciationRate: number;
-  
+
   /** Unique identifier for this investment */
   investmentId: string;
 
   // Advanced Features
   /** Whether advanced features are enabled */
   advanced?: boolean;
-  
+
   /** Whether this investment should roll over from another */
   rollOver?: boolean;
-  
+
   /** Amount to roll over from another investment */
   investmentToRoll?: number;
-  
+
   /** Year when rollover should occur */
   yearOfRollover?: number;
 
@@ -92,13 +92,13 @@ export interface InvestmentCalculatorProps {
 export interface DateAmountPair {
   /** The date for this data point */
   date: Date;
-  
+
   /** The nominal amount at this date */
   amount: number;
-  
+
   /** The inflation-adjusted amount at this date */
   inflationAdjustedAmount: number;
-  
+
   /** Which investment this data belongs to */
   investmentId: string;
 }
@@ -110,10 +110,10 @@ export interface DateAmountPair {
 export interface LineGraphEntry {
   /** Date for the x-axis */
   x: Date;
-  
+
   /** Primary value for the y-axis (nominal or inflation-adjusted) */
   y: number;
-  
+
   /** Alternative value for comparison (inflation-adjusted or nominal) */
   alternateY: number;
 }

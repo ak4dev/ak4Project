@@ -3,7 +3,7 @@ import { InvestmentCalculatorProps, LineGraphEntry } from '../types';
 
 /**
  * Investment Growth Calculator
- * 
+ *
  * Handles complex investment growth calculations including:
  * - Monthly compound growth
  * - Regular contributions and withdrawals
@@ -26,7 +26,7 @@ export class InvestmentCalculator {
 
   /**
    * Calculates the final investment value after all growth, contributions, and withdrawals
-   * 
+   *
    * @param showInflation - Whether to return inflation-adjusted value
    * @returns Formatted currency string of the final investment value
    */
@@ -46,13 +46,8 @@ export class InvestmentCalculator {
 
     // Calculate growth year by year
     for (let year = 0; year <= this.props.yearsOfGrowth; year++) {
-      const result = this.calculateYearGrowth(
-        year,
-        nominalAmount,
-        inflationAdjustedAmount,
-        monthlyGrowthRate
-      );
-      
+      const result = this.calculateYearGrowth(year, nominalAmount, inflationAdjustedAmount, monthlyGrowthRate);
+
       nominalAmount = result.nominal;
       inflationAdjustedAmount = result.inflationAdjusted;
 
@@ -130,7 +125,7 @@ export class InvestmentCalculator {
     year: number,
     startingNominal: number,
     startingInflationAdjusted: number,
-    monthlyGrowthRate: number
+    monthlyGrowthRate: number,
   ): { nominal: number; inflationAdjusted: number } {
     let nominal = startingNominal;
     let inflationAdjusted = startingInflationAdjusted;
@@ -179,12 +174,7 @@ export class InvestmentCalculator {
   /**
    * Adds a data point to the growth matrix for charting
    */
-  private addGrowthDataPoint(
-    year: number,
-    nominal: number,
-    inflationAdjusted: number,
-    showInflation: boolean
-  ): void {
+  private addGrowthDataPoint(year: number, nominal: number, inflationAdjusted: number, showInflation: boolean): void {
     this.props.growthMatrix.push({
       x: addYears(this.today, year),
       y: Math.floor(showInflation ? inflationAdjusted : nominal),
@@ -216,8 +206,7 @@ export class InvestmentCalculator {
     }
 
     // For subsequent years, check if we've reached the withdrawal start year
-    return year > this.props.yearWithdrawalsBegin || 
-           (year === this.props.yearWithdrawalsBegin && month >= 0);
+    return year > this.props.yearWithdrawalsBegin || (year === this.props.yearWithdrawalsBegin && month >= 0);
   }
 
   /**
@@ -235,8 +224,10 @@ export class InvestmentCalculator {
     }
 
     // Check if we haven't reached the contribution stop year
-    return year < this.props.yearContributionsStop || 
-           (year === this.props.yearContributionsStop && month < this.currentMonth);
+    return (
+      year < this.props.yearContributionsStop ||
+      (year === this.props.yearContributionsStop && month < this.currentMonth)
+    );
   }
 
   /**

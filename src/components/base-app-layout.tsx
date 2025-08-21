@@ -4,10 +4,10 @@ import NavigationPanel from './navigation-panel';
 
 /**
  * Base Application Layout Component
- * 
+ *
  * Provides the main layout structure for all pages using Cloudscape's AppLayout.
  * Manages navigation panel state and provides consistent layout behavior across the app.
- * 
+ *
  * Features:
  * - Persistent navigation panel state
  * - Responsive navigation panel behavior
@@ -30,15 +30,12 @@ export default function BaseAppLayout(props: AppLayoutProps) {
     <AppLayout
       // Header integration selector for global navigation
       headerSelector="#awsui-top-navigation"
-      
       // Navigation panel configuration
       navigation={<NavigationPanel />}
       navigationOpen={!navigationPanelState.collapsed}
       onNavigationChange={handleNavigationChange}
-      
       // Hide tools panel (not used in this application)
       toolsHide={true}
-      
       // Spread any additional props passed to the component
       {...props}
     />

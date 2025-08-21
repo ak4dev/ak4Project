@@ -1,6 +1,6 @@
 /**
  * Application Constants
- * 
+ *
  * Contains configuration values and environment detection logic
  * for the ak4 investment calculator application.
  */
@@ -17,13 +17,7 @@ export const TECH_DOMAIN = window.location.host.includes('.tech');
 
 // Domain Resolution
 // Determine the current domain environment for branding and configuration
-export const domain = IO_DOMAIN 
-  ? 'io' 
-  : DEV_DOMAIN 
-    ? 'dev' 
-    : TECH_DOMAIN 
-      ? 'tech' 
-      : 'local';
+export const domain = IO_DOMAIN ? 'io' : DEV_DOMAIN ? 'dev' : TECH_DOMAIN ? 'tech' : 'local';
 
 // Application Branding
 // Generate application name based on current environment

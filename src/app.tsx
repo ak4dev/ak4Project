@@ -10,10 +10,10 @@ import './styles/app.scss';
 
 /**
  * Main Application Component
- * 
+ *
  * Handles routing configuration and theme management for the entire application.
  * Uses either HashRouter or BrowserRouter based on configuration.
- * 
+ *
  * Routes:
  * - "/" - Dashboard page with investment calculator
  * - "/investment-calculator" - Dedicated investment calculator layout
@@ -22,7 +22,7 @@ import './styles/app.scss';
 export default function App() {
   // Select router type based on configuration
   const Router = USE_BROWSER_ROUTER ? BrowserRouter : HashRouter;
-  
+
   // Force dark mode theme application
   StorageHelper.applyTheme(Mode.Dark);
 
@@ -32,12 +32,12 @@ export default function App() {
         <Routes>
           {/* Main dashboard route */}
           <Route index path="/" element={<DashboardPage />} />
-          
+
           {/* Investment calculator nested routes */}
           <Route path="/investment-calculator" element={<Outlet />}>
             <Route path="" element={<InvestmentCalculatorLayout />} />
           </Route>
-          
+
           {/* Catch-all route for 404 pages */}
           <Route path="*" element={<NotFound />} />
         </Routes>
