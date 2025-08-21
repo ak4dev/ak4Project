@@ -1,28 +1,46 @@
 import { HashRouter, BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
+import { Mode } from '@cloudscape-design/global-styles';
+
 import { USE_BROWSER_ROUTER } from './common/constants';
-// import GlobalHeader from "./components/global-header";
+import { StorageHelper } from './common/helpers/storage-helper';
 import DashboardPage from './pages/dashboard/dashboard-page';
 import NotFound from './pages/not-found';
-import './styles/app.scss';
-import { StorageHelper } from './common/helpers/storage-helper';
-import { Mode } from '@cloudscape-design/global-styles';
 import InvestmentCalculatorLayout from './pages/investment-calculator/investment-calc-layout';
+import './styles/app.scss';
 
+/**
+ * Main Application Component
+ * 
+ * Handles routing configuration and theme management for the entire application.
+ * Uses either HashRouter or BrowserRouter based on configuration.
+ * 
+ * Routes:
+ * - "/" - Dashboard page with investment calculator
+ * - "/investment-calculator" - Dedicated investment calculator layout
+ * - "*" - 404 Not Found page
+ */
 export default function App() {
+  // Select router type based on configuration
   const Router = USE_BROWSER_ROUTER ? BrowserRouter : HashRouter;
-  StorageHelper.applyTheme(Mode.Dark); // Always set to dark mode
+  
+  // Force dark mode theme application
+  StorageHelper.applyTheme(Mode.Dark);
+
   return (
     <div style={{ height: '100%' }}>
       <Router>
-        <div>
-          <Routes>
-            <Route index path="/" element={<DashboardPage />} />
-            <Route path="/investment-calculator" element={<Outlet />}>
-              <Route path="" element={<InvestmentCalculatorLayout />} />
-            </Route>
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </div>
+        <Routes>
+          {/* Main dashboard route */}
+          <Route index path="/" element={<DashboardPage />} />
+          
+          {/* Investment calculator nested routes */}
+          <Route path="/investment-calculator" element={<Outlet />}>
+            <Route path="" element={<InvestmentCalculatorLayout />} />
+          </Route>
+          
+          {/* Catch-all route for 404 pages */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </Router>
     </div>
   );
